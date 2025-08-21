@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<!-- CORRECTED: This module's parent is now your custom backend project -->
+	<parent>
+		<groupId>com.goevently</groupId>
+		<artifactId>backend</artifactId>
+		<version>0.0.1-SNAPSHOT</version>
+		<relativePath>../pom.xml</relativePath> <!-- Path to the parent pom.xml -->
+	</parent>
+
+	<artifactId>eureka-server</artifactId>
+	<name>eureka-server</name>
+	<description>GoEvently Service Discovery Server</description> <!-- More descriptive name -->
+
+	<properties>
+		<java.version>17</java.version>
+		<!-- REMOVED: spring-cloud.version property from here. It's managed by the parent. -->
+	</properties>
+
+	<dependencies>
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-starter-netflix-eureka-server</artifactId>
+			<!-- Version is inherited from parent's dependencyManagement -->
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
+			<!-- Version is inherited from parent's dependencyManagement (via spring-boot-dependencies) -->
+		</dependency>
+	</dependencies>
+
+	<!-- REMOVED: dependencyManagement section from here. It's handled by the parent. -->
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+				<!-- Version is inherited from parent's dependencyManagement (via spring-boot-dependencies) -->
+			</plugin>
+		</plugins>
+	</build>
+
+</project>
