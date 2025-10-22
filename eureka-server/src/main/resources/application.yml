@@ -14,3 +14,11 @@ eureka:
   server:
     enable-self-preservation: false
     eviction-interval-timer-in-ms: 5000
+
+
+# Add this to see detailed startup logs
+logging:
+  level:
+    org.springframework.boot: DEBUG
+    org.springframework.cloud: DEBUG
+    root: INFO

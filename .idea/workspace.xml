@@ -4,11 +4,80 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="7c55ebb2-c1d5-48b0-b1df-ef955f13f4e0" name="Changes" comment="" />
+    <list default="true" id="7c55ebb2-c1d5-48b0-b1df-ef955f13f4e0" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/dataSources.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/easycode/codebase-v2.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/uiDesigner.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/api-gateway/src/main/java/com/goevently/apigateway/config/CorsConfig.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/api-gateway/src/main/java/com/goevently/apigateway/config/GatewayConfig.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/api-gateway/src/main/java/com/goevently/apigateway/config/SecurityConfig.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/api-gateway/src/main/java/com/goevently/apigateway/dto/ErrorResponse.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/api-gateway/src/main/java/com/goevently/apigateway/exception/GlobalExceptionHandler.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/api-gateway/src/main/java/com/goevently/apigateway/filter/GlobalLoggingFilter.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/api-gateway/src/main/java/com/goevently/apigateway/filter/JwtAuthenticationFilter.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/api-gateway/src/main/java/com/goevently/apigateway/util/JwtUtil.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/api-gateway/src/main/resources/application.yml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/auth-service/src/main/java/com/goevently/authservice/dto/AuthResponse.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/auth-service/src/main/java/com/goevently/authservice/dto/LoginRequest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/auth-service/src/main/java/com/goevently/authservice/dto/RegisterRequest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/auth-service/src/main/java/com/goevently/authservice/entity/Role.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/auth-service/src/main/java/com/goevently/authservice/exception/AuthException.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/auth-service/src/main/java/com/goevently/authservice/exception/GlobalExceptionHandler.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/auth-service/src/main/java/com/goevently/authservice/repository/UserRepository.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/auth-service/src/main/java/com/goevently/authservice/service/AuthService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/auth-service/src/main/resources/application.yml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/event-service/src/main/java/com/goevently/eventservice/dto/ApiResponse.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/event-service/src/main/java/com/goevently/eventservice/dto/CreateEventRequest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/event-service/src/main/java/com/goevently/eventservice/dto/EventResponse.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/event-service/src/main/java/com/goevently/eventservice/dto/UpdateEventRequest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/event-service/src/main/java/com/goevently/eventservice/entity/Event.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/event-service/src/main/java/com/goevently/eventservice/entity/Role.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/event-service/src/main/java/com/goevently/eventservice/exception/EventException.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/event-service/src/main/java/com/goevently/eventservice/exception/GlobalExceptionHandler.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/event-service/src/main/java/com/goevently/eventservice/util/EventMapper.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/event-service/src/main/resources/application.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/encodings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/eureka-server/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/eureka-server/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/eureka-server/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/eureka-server/src/main/resources/application.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="DatabaseLocalColorSettings">
+    <colors>
+      <entry key="dd4c7bd4-73e8-446e-a954-04b45b0374e3" value="Blue" />
+    </colors>
+  </component>
+  <component name="ExternalProjectsData">
+    <projectState path="$PROJECT_DIR$/auth-service">
+      <ProjectState />
+    </projectState>
+  </component>
+  <component name="ExternalProjectsManager">
+    <system id="GRADLE">
+      <state>
+        <projects_view>
+          <tree_state>
+            <expand />
+            <select />
+          </tree_state>
+        </projects_view>
+      </state>
+    </system>
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Class" />
+      </list>
+    </option>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -23,6 +92,9 @@
       </MavenGeneralSettings>
     </option>
   </component>
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="CurrentFile" />
+  </component>
   <component name="ProjectCodeStyleSettingsMigration">
     <option name="version" value="2" />
   </component>
@@ -32,30 +104,42 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RequestMappingsPanelOrder0": "0",
-    "RequestMappingsPanelOrder1": "1",
-    "RequestMappingsPanelWidth0": "75",
-    "RequestMappingsPanelWidth1": "75",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "WebServerToolWindowFactoryState": "false",
-    "git-widget-placeholder": "master",
-    "jdk.selected.JAVA_MODULE": "temurin-21",
-    "last_opened_file_path": "D:/Java/springboot/goevently/backend",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "project.structure.last.edited": "Modules",
-    "project.structure.proportion": "0.15",
-    "project.structure.side.proportion": "0.35500652",
-    "settings.editor.selected.configurable": "vcs.Git",
-    "spring.configuration.checksum": "4219ec48a4cd7bba5532a5475e7f37a0",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RequestMappingsPanelOrder0&quot;: &quot;0&quot;,
+    &quot;RequestMappingsPanelOrder1&quot;: &quot;1&quot;,
+    &quot;RequestMappingsPanelWidth0&quot;: &quot;75&quot;,
+    &quot;RequestMappingsPanelWidth1&quot;: &quot;75&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
+    &quot;jdk.selected.JAVA_MODULE&quot;: &quot;corretto-17&quot;,
+    &quot;last_opened_file_path&quot;: &quot;D:/Java/springboot/goevently/backend&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.35500652&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;,
+    &quot;spring.configuration.checksum&quot;: &quot;bcd96467f4d153c836d5439869a9cdc4&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  },
+  &quot;keyToStringList&quot;: {
+    &quot;DatabaseDriversLRU&quot;: [
+      &quot;mysql&quot;
+    ]
   }
-}]]></component>
-  <component name="RunManager">
+}</component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="D:\Java\springboot\goevently\backend" />
+    </key>
+  </component>
+  <component name="RunManager" selected="Spring Boot.ApiGatewayApplication">
     <configuration default="true" type="JetRunConfigurationType">
       <module name="backend" />
       <method v="2">
@@ -69,13 +153,66 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="EurekaServerApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
-      <module name="eureka-server" />
-      <option name="SPRING_BOOT_MAIN_CLASS" value="com.goevently.eurekaserver.EurekaServerApplication" />
+    <configuration name="ApiGatewayApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" temporary="true" nameIsGenerated="true">
+      <module name="api-gateway" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="com.goevently.apigateway.ApiGatewayApplication" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.goevently.apigateway.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration name="AuthServiceApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" temporary="true" nameIsGenerated="true">
+      <module name="auth-service" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="com.goevently.authservice.AuthServiceApplication" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.goevently.authservice.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="EurekaServerApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" temporary="true" nameIsGenerated="true">
+      <module name="eureka-server" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="com.goevently.eurekaserver.EurekaServerApplication" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.goevently.eurekaserver.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="EventServiceApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" temporary="true" nameIsGenerated="true">
+      <module name="event-service" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="com.goevently.eventservice.EventServiceApplication" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.goevently.eventservice.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Spring Boot.ApiGatewayApplication" />
+        <item itemvalue="Spring Boot.EventServiceApplication" />
+        <item itemvalue="Spring Boot.AuthServiceApplication" />
+        <item itemvalue="Spring Boot.EurekaServerApplication" />
+      </list>
+    </recent_temporary>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
@@ -89,7 +226,45 @@
       <workItem from="1749060126734" duration="1661000" />
       <workItem from="1755528841691" duration="4236000" />
       <workItem from="1755696154341" duration="2732000" />
-      <workItem from="1755780426800" duration="5915000" />
+      <workItem from="1755780426800" duration="14465000" />
+      <workItem from="1756020486993" duration="5304000" />
+      <workItem from="1756122807354" duration="1846000" />
+      <workItem from="1756219531363" duration="12085000" />
+      <workItem from="1756395631258" duration="607000" />
+      <workItem from="1756474294087" duration="594000" />
+      <workItem from="1756637170522" duration="4636000" />
+      <workItem from="1756730807234" duration="499000" />
+      <workItem from="1756731652710" duration="3851000" />
+      <workItem from="1756903141889" duration="6076000" />
+      <workItem from="1756991399606" duration="3163000" />
+      <workItem from="1757148620364" duration="14995000" />
+      <workItem from="1757219409530" duration="5449000" />
+      <workItem from="1757338005301" duration="3182000" />
+      <workItem from="1757426912006" duration="6837000" />
+      <workItem from="1757594774268" duration="6728000" />
+      <workItem from="1757679494722" duration="2633000" />
+      <workItem from="1757744076231" duration="614000" />
+      <workItem from="1757945092441" duration="4523000" />
+      <workItem from="1758115354981" duration="17000" />
+      <workItem from="1758203733107" duration="10663000" />
+      <workItem from="1758295190386" duration="596000" />
+      <workItem from="1758350843071" duration="612000" />
+      <workItem from="1758441577243" duration="1546000" />
+      <workItem from="1758450368210" duration="15078000" />
+      <workItem from="1758550134067" duration="2184000" />
+      <workItem from="1758629144555" duration="10135000" />
+      <workItem from="1758724561993" duration="2653000" />
+      <workItem from="1758982213364" duration="5903000" />
+      <workItem from="1759030206497" duration="9377000" />
+      <workItem from="1759152986033" duration="9448000" />
+      <workItem from="1759507365391" duration="2367000" />
+      <workItem from="1760162029295" duration="1485000" />
+      <workItem from="1760362505607" duration="4576000" />
+      <workItem from="1760451328860" duration="1841000" />
+      <workItem from="1760799340193" duration="5057000" />
+      <workItem from="1760949730343" duration="17713000" />
+      <workItem from="1761021100897" duration="7452000" />
+      <workItem from="1761139502856" duration="3004000" />
     </task>
     <servers />
   </component>

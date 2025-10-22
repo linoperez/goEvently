@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="com.obiscr.chatgpt.settings.EasyCodeState">
+    <option name="projectFiles" value="$PROJECT_DIR$/auth-service/src/main/java/com/goevently/authservice/AuthServiceApplication.java;D:/Java/springboot/goevently/backend/auth-service/src/test/java/com/goevently/authservice/AuthServiceApplicationTests.java;D:/Java/springboot/goevently/backend/auth-service/pom.xml;D:/Java/springboot/goevently/backend/eureka-server/src/main/java/com/goevently/eurekaserver/EurekaServerApplication.java;D:/Java/springboot/goevently/backend/eureka-server/src/test/java/com/goevently/eurekaserver/EurekaServerApplicationTests.java;D:/Java/springboot/goevently/backend/eureka-server/pom.xml;D:/Java/springboot/goevently/backend/pom.xml" />
+  </component>
+</project>

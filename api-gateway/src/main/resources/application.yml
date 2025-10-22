@@ -1,0 +1,49 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: api-gateway
+  
+  cloud:
+    gateway:
+      # Simple route configuration
+      routes:
+        - id: auth-service
+          uri: lb://auth-service
+          predicates:
+            - Path=/api/auth/**
+
+        - id: event-service
+          uri: lb://event-service
+          predicates:
+            - Path=/api/events/**
+
+eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+  instance:
+    prefer-ip-address: true
+
+# JWT Configuration
+jwt:
+  secret: ${JWT_SECRET:myGoEventlySecretKeyThatIsLongEnoughForHS256Algorithm}
+
+# Management endpoints
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,gateway
+  endpoint:
+    health:
+      show-details: always
+
+# Logging
+logging:
+  level:
+    com.goevently.apigateway: INFO
+    org.springframework.cloud.gateway: DEBUG
