@@ -12,19 +12,16 @@ import org.springframework.stereotype.Component;
 @Component
 public class EventMapper {
 
-    /**
-     * Converts CreateEventRequest DTO to Event entity.
-     */
     public Event toEntity(CreateEventRequest request, String organizerUsername) {
-        return Event.builder()
-                .name(request.getName())
-                .description(request.getDescription())
-                .location(request.getLocation())
-                .startTime(request.getStartTime())
-                .endTime(request.getEndTime())
-                .maxAttendees(request.getMaxAttendees())
-                .organizerUsername(organizerUsername)
-                .build();
+        Event event = new Event();
+        event.setName(request.getName());
+        event.setDescription(request.getDescription());
+        event.setLocation(request.getLocation());
+        event.setStartTime(request.getStartTime());
+        event.setEndTime(request.getEndTime());
+        event.setMaxAttendees(request.getMaxAttendees());
+        event.setOrganizerUsername(organizerUsername); // Add this line
+        return event;
     }
 
     /**
@@ -39,6 +36,10 @@ public class EventMapper {
                 .startTime(event.getStartTime())
                 .endTime(event.getEndTime())
                 .maxAttendees(event.getMaxAttendees())
+                .venueId(event.getVenue() != null ? event.getVenue().getId() : null)
+                .venueName(event.getVenue() != null ? event.getVenue().getName() : null)
+                .categoryId(event.getCategory() != null ? event.getCategory().getId() : null)
+                .categoryName(event.getCategory() != null ? event.getCategory().getName() : null)
                 .organizerUsername(event.getOrganizerUsername())
                 .createdAt(event.getCreatedAt())
                 .updatedAt(event.getUpdatedAt())
@@ -68,5 +69,7 @@ public class EventMapper {
         if (request.getMaxAttendees() != null) {
             event.setMaxAttendees(request.getMaxAttendees());
         }
+        // NOTE: venueId and categoryId will be handled in EventService
+        // because they require repository lookups
     }
 }

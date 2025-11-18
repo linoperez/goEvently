@@ -1,0 +1,57 @@
+version: '3.8'
+
+services:
+  eureka-server:
+    build:
+      context: .
+      dockerfile: eureka-server/Dockerfile
+    image: goevently/eureka-server:latest
+    # No container_name or ports - just build the image
+
+  auth-service:
+    build:
+      context: .
+      dockerfile: auth-service/Dockerfile
+    image: goevently/auth-service:latest
+    depends_on:
+      - eureka-server
+
+  event-service:
+    build:
+      context: .
+      dockerfile: event-service/Dockerfile
+    image: goevently/event-service:latest
+    depends_on:
+      - eureka-server
+
+  notification-service:
+    build:
+      context: .
+      dockerfile: notification-service/Dockerfile
+    image: goevently/notification-service:latest
+    depends_on:
+      - eureka-server
+
+  booking-service:
+    build:
+      context: .
+      dockerfile: booking-service/Dockerfile
+    image: goevently/booking-service:latest
+    depends_on:
+      - eureka-server
+
+  payment-service:
+    build:
+      context: .
+      dockerfile: payment-service/Dockerfile
+    image: goevently/payment-service:latest
+    depends_on:
+      - eureka-server
+
+  api-gateway:
+    build:
+      context: .
+      dockerfile: api-gateway/Dockerfile
+    image: goevently/api-gateway:latest
+    depends_on:
+      - eureka-server

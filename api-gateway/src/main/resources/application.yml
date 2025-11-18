@@ -19,6 +19,47 @@ spring:
           predicates:
             - Path=/api/events/**
 
+        # TICKET TIERS
+        - id: ticket-tier-service
+          uri: lb://event-service
+          predicates:
+            - Path=/api/ticket-tiers/**
+          filters:
+            - RewritePath=/api/ticket-tiers/(?<segment>.*), /api/ticket-tiers/${segment}
+
+        # EVENT SERVICE - VENUES
+        - id: event-service-venues
+          uri: lb://event-service
+          predicates:
+            - Path=/api/venues/**
+
+        # Event Service - Categories
+        - id: event-service-categories
+          uri: lb://event-service
+          predicates:
+            - Path=/api/categories/**
+
+        # Notification Service
+        - id: notification-service
+          uri: lb://notification-service
+          predicates:
+            - Path=/api/notifications/**
+
+        # Booking Service
+        - id: booking-service
+          uri: lb://booking-service
+          predicates:
+            - Path=/api/bookings/**
+
+        # Payment Service
+        - id: payment-service
+          uri: lb://payment-service
+          predicates:
+            - Path=/api/payments/**
+          filters:
+            - StripPrefix=0
+
+
 eureka:
   client:
     register-with-eureka: true
@@ -47,3 +88,9 @@ logging:
   level:
     com.goevently.apigateway: INFO
     org.springframework.cloud.gateway: DEBUG
+
+jackson:
+  serialization:
+    write-dates-as-timestamps: false
+  deserialization:
+    fail-on-unknown-properties: false

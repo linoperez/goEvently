@@ -1,5 +1,6 @@
 server:
   port: 8761 # The port where the server will listen
+  address: 0.0.0.0  # Bind to all interfaces
 
 spring:
   application:

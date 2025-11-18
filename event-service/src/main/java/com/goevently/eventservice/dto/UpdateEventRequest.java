@@ -28,4 +28,7 @@ public class UpdateEventRequest {
     @Min(value = 1, message = "Max attendees must be at least 1")
     @Max(value = 100000, message = "Max attendees cannot exceed 100,000")
     private Integer maxAttendees;
+    private Long venueId;
+    private Long categoryId;
+
 }

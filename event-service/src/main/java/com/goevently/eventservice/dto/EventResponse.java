@@ -5,16 +5,16 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
-/**
- * DTO for event responses.
- */
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class EventResponse {
+public class EventResponse implements Serializable {  // ← ADD THIS
+    private static final long serialVersionUID = 1L;  // ← ADD THIS
+
     private Long id;
     private String name;
     private String description;
@@ -22,6 +22,10 @@ public class EventResponse {
     private LocalDateTime startTime;
     private LocalDateTime endTime;
     private Integer maxAttendees;
+    private Long venueId;
+    private String venueName;
+    private Long categoryId;
+    private String categoryName;
     private String organizerUsername;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;

@@ -4,56 +4,206 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="7c55ebb2-c1d5-48b0-b1df-ef955f13f4e0" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/dataSources.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/easycode/codebase-v2.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/uiDesigner.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/api-gateway/src/main/java/com/goevently/apigateway/config/CorsConfig.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/api-gateway/src/main/java/com/goevently/apigateway/config/GatewayConfig.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/api-gateway/src/main/java/com/goevently/apigateway/config/SecurityConfig.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/api-gateway/src/main/java/com/goevently/apigateway/dto/ErrorResponse.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/api-gateway/src/main/java/com/goevently/apigateway/exception/GlobalExceptionHandler.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/api-gateway/src/main/java/com/goevently/apigateway/filter/GlobalLoggingFilter.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/api-gateway/src/main/java/com/goevently/apigateway/filter/JwtAuthenticationFilter.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/api-gateway/src/main/java/com/goevently/apigateway/util/JwtUtil.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/api-gateway/src/main/resources/application.yml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/auth-service/src/main/java/com/goevently/authservice/dto/AuthResponse.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/auth-service/src/main/java/com/goevently/authservice/dto/LoginRequest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/auth-service/src/main/java/com/goevently/authservice/dto/RegisterRequest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/auth-service/src/main/java/com/goevently/authservice/entity/Role.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/auth-service/src/main/java/com/goevently/authservice/exception/AuthException.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/auth-service/src/main/java/com/goevently/authservice/exception/GlobalExceptionHandler.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/auth-service/src/main/java/com/goevently/authservice/repository/UserRepository.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/auth-service/src/main/java/com/goevently/authservice/service/AuthService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/auth-service/src/main/resources/application.yml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/event-service/src/main/java/com/goevently/eventservice/dto/ApiResponse.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/event-service/src/main/java/com/goevently/eventservice/dto/CreateEventRequest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/event-service/src/main/java/com/goevently/eventservice/dto/EventResponse.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/event-service/src/main/java/com/goevently/eventservice/dto/UpdateEventRequest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/event-service/src/main/java/com/goevently/eventservice/entity/Event.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/event-service/src/main/java/com/goevently/eventservice/entity/Role.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/event-service/src/main/java/com/goevently/eventservice/exception/EventException.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/event-service/src/main/java/com/goevently/eventservice/exception/GlobalExceptionHandler.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/event-service/src/main/java/com/goevently/eventservice/util/EventMapper.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/event-service/src/main/resources/application.yml" afterDir="false" />
+    <list default="true" id="7c55ebb2-c1d5-48b0-b1df-ef955f13f4e0" name="Changes" comment="Implemented all basic microservices.">
+      <change afterPath="$PROJECT_DIR$/.dockerignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/dataSources/dd4c7bd4-73e8-446e-a954-04b45b0374e3.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/dataSources/dd4c7bd4-73e8-446e-a954-04b45b0374e3/storage_v2/_src_/schema/information_schema.FNRwLQ.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/dataSources/dd4c7bd4-73e8-446e-a954-04b45b0374e3/storage_v2/_src_/schema/mysql.osA4Bg.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/dataSources/dd4c7bd4-73e8-446e-a954-04b45b0374e3/storage_v2/_src_/schema/performance_schema.kIw0nw.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/dataSources/dd4c7bd4-73e8-446e-a954-04b45b0374e3/storage_v2/_src_/schema/sys.zb4BAA.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/sqldialects.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/api-gateway/.gitattributes" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/api-gateway/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/api-gateway/.mvn/wrapper/maven-wrapper.properties" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/api-gateway/Dockerfile" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/api-gateway/file.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/api-gateway/mvnw" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/api-gateway/mvnw.cmd" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/api-gateway/pom.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/api-gateway/src/main/java/com/goevently/apigateway/ApiGatewayApplication.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/api-gateway/src/main/java/com/goevently/apigateway/config/JacksonConfig.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/api-gateway/src/main/resources/application.properties" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/api-gateway/src/test/java/com/goevently/apigateway/ApiGatewayApplicationTests.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/auth-service/.gitattributes" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/auth-service/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/auth-service/.mvn/wrapper/maven-wrapper.properties" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/auth-service/Dockerfile" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/auth-service/mvnw" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/auth-service/mvnw.cmd" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/auth-service/pom.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/auth-service/src/main/java/com/goevently/authservice/AuthServiceApplication.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/auth-service/src/main/java/com/goevently/authservice/config/SecurityConfig.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/auth-service/src/main/java/com/goevently/authservice/controller/AuthController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/auth-service/src/main/java/com/goevently/authservice/entity/User.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/auth-service/src/main/java/com/goevently/authservice/util/JwtUtil.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/auth-service/src/test/java/com/goevently/authservice/AuthServiceApplicationTests.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/booking-service/.gitattributes" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/booking-service/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/booking-service/.mvn/wrapper/maven-wrapper.properties" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/booking-service/Dockerfile" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/booking-service/mvnw" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/booking-service/mvnw.cmd" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/booking-service/pom.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/booking-service/src/main/java/com/goevently/bookingservice/BookingServiceApplication.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/booking-service/src/main/java/com/goevently/bookingservice/config/KafkaConsumerConfig.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/booking-service/src/main/java/com/goevently/bookingservice/config/KafkaProducerConfig.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/booking-service/src/main/java/com/goevently/bookingservice/controller/BookingController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/booking-service/src/main/java/com/goevently/bookingservice/dto/ApiResponse.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/booking-service/src/main/java/com/goevently/bookingservice/dto/BookingMessage.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/booking-service/src/main/java/com/goevently/bookingservice/dto/BookingRequest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/booking-service/src/main/java/com/goevently/bookingservice/dto/BookingResponse.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/booking-service/src/main/java/com/goevently/bookingservice/entity/Booking.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/booking-service/src/main/java/com/goevently/bookingservice/entity/BookingStatus.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/booking-service/src/main/java/com/goevently/bookingservice/exception/GlobalExceptionHandler.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/booking-service/src/main/java/com/goevently/bookingservice/exception/InvalidTokenException.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/booking-service/src/main/java/com/goevently/bookingservice/exception/ResourceNotFoundException.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/booking-service/src/main/java/com/goevently/bookingservice/repository/BookingRepository.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/booking-service/src/main/java/com/goevently/bookingservice/service/BookingService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/booking-service/src/main/java/com/goevently/bookingservice/service/KafkaProducerService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/booking-service/src/main/java/com/goevently/bookingservice/util/JwtTokenUtil.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/booking-service/src/main/resources/application.yml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/booking-service/src/test/java/com/goevently/bookingservice/BookingServiceApplicationTests.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose-build.yml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose.yml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/eureka-server/Dockerfile" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/event-service/.gitattributes" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/event-service/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/event-service/.mvn/wrapper/maven-wrapper.properties" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/event-service/Dockerfile" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/event-service/mvnw" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/event-service/mvnw.cmd" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/event-service/pom.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/event-service/src/main/java/com/goevently/eventservice/EventServiceApplication.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/event-service/src/main/java/com/goevently/eventservice/config/KafkaProducerConfig.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/event-service/src/main/java/com/goevently/eventservice/config/RedisConfig.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/event-service/src/main/java/com/goevently/eventservice/config/SecurityConfig.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/event-service/src/main/java/com/goevently/eventservice/constants/KafkaTopics.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/event-service/src/main/java/com/goevently/eventservice/controller/EventCategoryController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/event-service/src/main/java/com/goevently/eventservice/controller/EventController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/event-service/src/main/java/com/goevently/eventservice/controller/TicketTierController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/event-service/src/main/java/com/goevently/eventservice/controller/VenueController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/event-service/src/main/java/com/goevently/eventservice/dto/CategoryResponse.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/event-service/src/main/java/com/goevently/eventservice/dto/CreateCategoryRequest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/event-service/src/main/java/com/goevently/eventservice/dto/CreateTicketTierRequest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/event-service/src/main/java/com/goevently/eventservice/dto/CreateVenueRequest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/event-service/src/main/java/com/goevently/eventservice/dto/EventFilterRequest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/event-service/src/main/java/com/goevently/eventservice/dto/EventSearchRequest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/event-service/src/main/java/com/goevently/eventservice/dto/PaginatedResponse.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/event-service/src/main/java/com/goevently/eventservice/dto/TicketTierResponse.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/event-service/src/main/java/com/goevently/eventservice/dto/UpdateCategoryRequest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/event-service/src/main/java/com/goevently/eventservice/dto/UpdateTicketTierRequest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/event-service/src/main/java/com/goevently/eventservice/dto/UpdateVenueRequest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/event-service/src/main/java/com/goevently/eventservice/dto/VenueResponse.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/event-service/src/main/java/com/goevently/eventservice/entity/EventCategory.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/event-service/src/main/java/com/goevently/eventservice/entity/TicketTier.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/event-service/src/main/java/com/goevently/eventservice/entity/Venue.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/event-service/src/main/java/com/goevently/eventservice/entity/VenueStatus.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/event-service/src/main/java/com/goevently/eventservice/filter/JwtAuthFilter.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/event-service/src/main/java/com/goevently/eventservice/repository/EventCategoryRepository.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/event-service/src/main/java/com/goevently/eventservice/repository/EventRepository.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/event-service/src/main/java/com/goevently/eventservice/repository/TicketTierRepository.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/event-service/src/main/java/com/goevently/eventservice/repository/VenueRepository.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/event-service/src/main/java/com/goevently/eventservice/service/EventCategoryService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/event-service/src/main/java/com/goevently/eventservice/service/EventService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/event-service/src/main/java/com/goevently/eventservice/service/KafkaProducerService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/event-service/src/main/java/com/goevently/eventservice/service/TicketTierService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/event-service/src/main/java/com/goevently/eventservice/service/VenueService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/event-service/src/main/java/com/goevently/eventservice/util/CategoryMapper.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/event-service/src/main/java/com/goevently/eventservice/util/TicketTierMapper.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/event-service/src/main/java/com/goevently/eventservice/util/VenueMapper.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/event-service/src/main/resources/application.properties" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/event-service/src/test/java/com/goevently/eventservice/EventServiceApplicationTests.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/init-scripts/01-create-databases.sql" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/notification-service/.gitattributes" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/notification-service/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/notification-service/.mvn/wrapper/maven-wrapper.properties" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/notification-service/Dockerfile" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/notification-service/mvnw" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/notification-service/mvnw.cmd" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/notification-service/pom.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/notification-service/src/main/java/com/goevently/notificationservice/NotificationServiceApplication.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/notification-service/src/main/java/com/goevently/notificationservice/config/KafkaConsumerConfig.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/notification-service/src/main/java/com/goevently/notificationservice/controller/NotificationController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/notification-service/src/main/java/com/goevently/notificationservice/dto/ApiResponse.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/notification-service/src/main/java/com/goevently/notificationservice/dto/EventMessage.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/notification-service/src/main/java/com/goevently/notificationservice/dto/NotificationRequest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/notification-service/src/main/java/com/goevently/notificationservice/dto/NotificationResponse.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/notification-service/src/main/java/com/goevently/notificationservice/entity/Notification.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/notification-service/src/main/java/com/goevently/notificationservice/entity/NotificationStatus.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/notification-service/src/main/java/com/goevently/notificationservice/entity/NotificationType.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/notification-service/src/main/java/com/goevently/notificationservice/exception/GlobalExceptionHandler.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/notification-service/src/main/java/com/goevently/notificationservice/exception/ResourceNotFoundException.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/notification-service/src/main/java/com/goevently/notificationservice/listener/EventKafkaListener.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/notification-service/src/main/java/com/goevently/notificationservice/repository/NotificationRepository.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/notification-service/src/main/java/com/goevently/notificationservice/service/EmailNotificationService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/notification-service/src/main/java/com/goevently/notificationservice/service/InAppNotificationService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/notification-service/src/main/java/com/goevently/notificationservice/service/NotificationService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/notification-service/src/main/java/com/goevently/notificationservice/service/SmsNotificationService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/notification-service/src/main/resources/application.yml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/notification-service/src/test/java/com/goevently/notificationservice/NotificationServiceApplicationTests.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/payment-service/.gitattributes" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/payment-service/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/payment-service/.mvn/wrapper/maven-wrapper.properties" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/payment-service/Dockerfile" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/payment-service/mvnw" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/payment-service/mvnw.cmd" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/payment-service/pom.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/payment-service/src/main/java/com/goevently/paymentservice/PaymentServiceApplication.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/payment-service/src/main/java/com/goevently/paymentservice/client/MockRazorpayClient.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/payment-service/src/main/java/com/goevently/paymentservice/client/RazorpayClient.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/payment-service/src/main/java/com/goevently/paymentservice/config/KafkaConsumerConfig.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/payment-service/src/main/java/com/goevently/paymentservice/config/KafkaProducerConfig.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/payment-service/src/main/java/com/goevently/paymentservice/controller/PaymentController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/payment-service/src/main/java/com/goevently/paymentservice/dto/ApiResponse.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/payment-service/src/main/java/com/goevently/paymentservice/dto/PaymentMessage.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/payment-service/src/main/java/com/goevently/paymentservice/dto/PaymentRequest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/payment-service/src/main/java/com/goevently/paymentservice/dto/PaymentResponse.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/payment-service/src/main/java/com/goevently/paymentservice/dto/RazorpayOrderRequest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/payment-service/src/main/java/com/goevently/paymentservice/dto/RazorpayOrderResponse.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/payment-service/src/main/java/com/goevently/paymentservice/dto/RazorpayWebhookPayload.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/payment-service/src/main/java/com/goevently/paymentservice/entity/Payment.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/payment-service/src/main/java/com/goevently/paymentservice/entity/PaymentMethod.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/payment-service/src/main/java/com/goevently/paymentservice/entity/PaymentStatus.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/payment-service/src/main/java/com/goevently/paymentservice/exception/GlobalExceptionHandler.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/payment-service/src/main/java/com/goevently/paymentservice/repository/PaymentRepository.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/payment-service/src/main/java/com/goevently/paymentservice/service/KafkaProducerService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/payment-service/src/main/java/com/goevently/paymentservice/service/PaymentService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/payment-service/src/main/java/com/goevently/paymentservice/util/JwtTokenUtil.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/payment-service/src/main/resources/application.properties" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/payment-service/src/main/resources/application.yml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/payment-service/src/test/java/com/goevently/paymentservice/PaymentServiceApplicationTests.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/reset-all-data.bat" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/start-all-services.bat" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/start-all.sh" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/starting-up-docker.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/stop-all-services.bat" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/encodings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api-gateway/src/main/java/com/goevently/apigateway/config/SecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/api-gateway/src/main/java/com/goevently/apigateway/config/SecurityConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api-gateway/src/main/java/com/goevently/apigateway/dto/ErrorResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/api-gateway/src/main/java/com/goevently/apigateway/dto/ErrorResponse.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api-gateway/src/main/java/com/goevently/apigateway/exception/GlobalExceptionHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/api-gateway/src/main/java/com/goevently/apigateway/exception/GlobalExceptionHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api-gateway/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/api-gateway/src/main/resources/application.yml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/eureka-server/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/eureka-server/pom.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/eureka-server/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/eureka-server/src/main/resources/application.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/event-service/src/main/java/com/goevently/eventservice/dto/ApiResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/event-service/src/main/java/com/goevently/eventservice/dto/ApiResponse.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/event-service/src/main/java/com/goevently/eventservice/dto/CreateEventRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/event-service/src/main/java/com/goevently/eventservice/dto/CreateEventRequest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/event-service/src/main/java/com/goevently/eventservice/dto/EventResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/event-service/src/main/java/com/goevently/eventservice/dto/EventResponse.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/event-service/src/main/java/com/goevently/eventservice/dto/UpdateEventRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/event-service/src/main/java/com/goevently/eventservice/dto/UpdateEventRequest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/event-service/src/main/java/com/goevently/eventservice/entity/Event.java" beforeDir="false" afterPath="$PROJECT_DIR$/event-service/src/main/java/com/goevently/eventservice/entity/Event.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/event-service/src/main/java/com/goevently/eventservice/util/EventMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/event-service/src/main/java/com/goevently/eventservice/util/EventMapper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/event-service/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/event-service/src/main/resources/application.yml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
-  </component>
-  <component name="DatabaseLocalColorSettings">
-    <colors>
-      <entry key="dd4c7bd4-73e8-446e-a954-04b45b0374e3" value="Blue" />
-    </colors>
   </component>
   <component name="ExternalProjectsData">
     <projectState path="$PROJECT_DIR$/auth-service">
@@ -80,6 +230,11 @@
     </option>
   </component>
   <component name="Git.Settings">
+    <option name="PREVIOUS_COMMIT_AUTHORS">
+      <list>
+        <option value="swayam" />
+      </list>
+    </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="MarkdownSettingsMigration">
@@ -106,6 +261,7 @@
   </component>
   <component name="PropertiesComponent">{
   &quot;keyToString&quot;: {
+    &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
     &quot;RequestMappingsPanelOrder0&quot;: &quot;0&quot;,
     &quot;RequestMappingsPanelOrder1&quot;: &quot;1&quot;,
     &quot;RequestMappingsPanelWidth0&quot;: &quot;75&quot;,
@@ -121,11 +277,11 @@
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
     &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
     &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Project&quot;,
     &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
     &quot;project.structure.side.proportion&quot;: &quot;0.35500652&quot;,
     &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;,
-    &quot;spring.configuration.checksum&quot;: &quot;bcd96467f4d153c836d5439869a9cdc4&quot;,
+    &quot;spring.configuration.checksum&quot;: &quot;15d7edc97c280a4c9db451cbc6a0cccb&quot;,
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   },
   &quot;keyToStringList&quot;: {
@@ -139,7 +295,18 @@
       <recent name="D:\Java\springboot\goevently\backend" />
     </key>
   </component>
-  <component name="RunManager" selected="Spring Boot.ApiGatewayApplication">
+  <component name="RunManager" selected="Spring Boot.EurekaServerApplication">
+    <configuration name="start-all-services" type="BatchConfigurationType" factoryName="Batch" temporary="true">
+      <module name="backend" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SCRIPT_NAME" value="start-all-services.bat" />
+      <option name="PARAMETERS" value="" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration default="true" type="JetRunConfigurationType">
       <module name="backend" />
       <method v="2">
@@ -179,6 +346,13 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration name="BookingServiceApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
+      <module name="booking-service" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="com.goevently.bookingservice.BookingServiceApplication" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="EurekaServerApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" temporary="true" nameIsGenerated="true">
       <module name="eureka-server" />
       <option name="SPRING_BOOT_MAIN_CLASS" value="com.goevently.eurekaserver.EurekaServerApplication" />
@@ -205,12 +379,27 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration name="NotificationServiceApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
+      <module name="notification-service" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="com.goevently.notificationservice.NotificationServiceApplication" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="PaymentServiceApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
+      <module name="payment-service" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="com.goevently.paymentservice.PaymentServiceApplication" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Spring Boot.ApiGatewayApplication" />
+        <item itemvalue="Spring Boot.EurekaServerApplication" />
+        <item itemvalue="Batch.start-all-services" />
         <item itemvalue="Spring Boot.EventServiceApplication" />
         <item itemvalue="Spring Boot.AuthServiceApplication" />
-        <item itemvalue="Spring Boot.EurekaServerApplication" />
+        <item itemvalue="Spring Boot.ApiGatewayApplication" />
       </list>
     </recent_temporary>
   </component>
@@ -264,8 +453,35 @@
       <workItem from="1760799340193" duration="5057000" />
       <workItem from="1760949730343" duration="17713000" />
       <workItem from="1761021100897" duration="7452000" />
-      <workItem from="1761139502856" duration="3004000" />
+      <workItem from="1761139502856" duration="11795000" />
+      <workItem from="1761163534716" duration="3583000" />
+      <workItem from="1761232798030" duration="4445000" />
+      <workItem from="1761319252447" duration="5556000" />
+      <workItem from="1761365946080" duration="12424000" />
+      <workItem from="1761458581064" duration="19255000" />
+      <workItem from="1761662315838" duration="1229000" />
+      <workItem from="1762178411769" duration="2557000" />
+      <workItem from="1762266840603" duration="10221000" />
+      <workItem from="1762347933456" duration="8876000" />
+      <workItem from="1762448745806" duration="595000" />
+      <workItem from="1762541621455" duration="3810000" />
+      <workItem from="1762546575462" duration="1679000" />
+      <workItem from="1762585602162" duration="10213000" />
+      <workItem from="1762602509467" duration="11863000" />
+      <workItem from="1763128156953" duration="1296000" />
+      <workItem from="1763194102569" duration="5451000" />
+      <workItem from="1763300992378" duration="3914000" />
+      <workItem from="1763476962376" duration="5408000" />
     </task>
+    <task id="LOCAL-00001" summary="I think everything until week 6">
+      <option name="closed" value="true" />
+      <created>1761145718378</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1761145718378</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -281,5 +497,10 @@
         </entry>
       </map>
     </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="I think everything until week 6" />
+    <MESSAGE value="Implemented all basic microservices." />
+    <option name="LAST_COMMIT_MESSAGE" value="Implemented all basic microservices." />
   </component>
 </project>
