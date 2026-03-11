@@ -9,6 +9,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
+import java.math.BigDecimal;
 
 @Entity
 @Table(name = "bookings")
@@ -17,6 +18,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Builder
 public class Booking {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -27,6 +29,14 @@ public class Booking {
     @Column(nullable = false)
     private Long eventId;
 
+    /**
+     * Phase 1: ticket tier reference.
+     * Keep nullable for now to avoid breaking existing DB records.
+     * New bookings will set it.
+     */
+    @Column(name = "ticket_tier_id")
+    private Long ticketTierId;
+
     @Column(nullable = false)
     private String status;
 
@@ -36,6 +46,10 @@ public class Booking {
     @Column(name = "payment_id")
     private String paymentId;
 
+    /**
+     * Existing column.
+     * For Phase 1, this is quantity.
+     */
     @Column(nullable = false)
     private Integer seats;
 
@@ -49,4 +63,10 @@ public class Booking {
     @UpdateTimestamp
     @Column(nullable = false)
     private LocalDateTime updatedAt;
+
+    @Column(name = "total_amount", nullable = false)
+    private BigDecimal totalAmount;
+
+    @Column(name = "currency", nullable = false)
+    private String currency;
 }

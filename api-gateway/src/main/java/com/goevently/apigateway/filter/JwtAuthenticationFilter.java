@@ -34,7 +34,8 @@ public class JwtAuthenticationFilter extends AbstractGatewayFilterFactory<JwtAut
             ServerHttpRequest request = exchange.getRequest();
 
             // Skip authentication for public endpoints
-            if (isPublicEndpoint(request.getPath().toString())) {
+            if (isPublicEndpoint(request)) {
+//            if (isPublicEndpoint(request.getPath().toString())) {
                 return chain.filter(exchange);
             }
 
@@ -74,10 +75,27 @@ public class JwtAuthenticationFilter extends AbstractGatewayFilterFactory<JwtAut
         };
     }
 
-    private boolean isPublicEndpoint(String path) {
-        return path.startsWith("/api/auth/") ||
-                path.startsWith("/actuator/") ||
-                (path.startsWith("/api/events/") && path.contains("GET")); // Public event listings
+//    private boolean isPublicEndpoint(String path) {
+//        return path.startsWith("/api/auth/") ||
+//                path.startsWith("/actuator/") ||
+//                (path.startsWith("/api/events/") && path.contains("GET")); // Public event listings
+//    }
+    private boolean isPublicEndpoint(ServerHttpRequest request) {
+        String path = request.getPath().value();
+        String method = request.getMethod() != null ? request.getMethod().name() : "";
+
+        // Always public
+        if (path.startsWith("/api/auth/") || path.startsWith("/actuator/")) return true;
+
+        // Public browsing endpoints (GET only)
+        if ("GET".equalsIgnoreCase(method)) {
+            return path.startsWith("/api/events/")
+                    || path.startsWith("/api/venues/")
+                    || path.startsWith("/api/categories/")
+                    || path.startsWith("/api/ticket-tiers/");
+        }
+
+        return false;
     }
 
     private Mono<Void> onError(org.springframework.web.server.ServerWebExchange exchange,

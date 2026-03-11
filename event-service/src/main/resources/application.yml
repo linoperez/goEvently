@@ -8,7 +8,7 @@ spring:
   datasource:
     url: jdbc:mysql://localhost:3306/goevently_event_db?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true
     username: root
-    password: ${DB_PASSWORD:Sw@yam107}  # ← CHANGED: Environment variable
+    password: ${DB_PASSWORD:sw@yam107}  # ← CHANGED: Environment variable
     driver-class-name: com.mysql.cj.jdbc.Driver
 
   jpa:

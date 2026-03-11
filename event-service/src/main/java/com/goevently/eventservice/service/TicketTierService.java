@@ -117,4 +117,31 @@ public class TicketTierService {
                 .last(tierPage.isLast())
                 .build();
     }
+
+    public TicketTierResponse getTicketTierById(Long id) {
+        TicketTier tier = ticketTierRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Ticket tier not found with id: " + id));
+        return mapToResponse(tier);
+    }
+
+    private TicketTierResponse mapToResponse(TicketTier tier) {
+        TicketTierResponse response = new TicketTierResponse();
+        response.setId(tier.getId());
+
+        // null-safe and lazy-safe enough for current flow
+        if (tier.getEvent() != null) {
+            response.setEventId(tier.getEvent().getId());
+        } else {
+            response.setEventId(null);
+        }
+        response.setName(tier.getName());
+        response.setPrice(tier.getPrice());
+        response.setTotalQuantity(tier.getTotalQuantity());
+        response.setRemainingQuantity(tier.getRemainingQuantity());
+        response.setDescription(tier.getDescription());
+        response.setCreatedAt(tier.getCreatedAt());
+        response.setUpdatedAt(tier.getUpdatedAt());
+
+        return response;
+    }
 }

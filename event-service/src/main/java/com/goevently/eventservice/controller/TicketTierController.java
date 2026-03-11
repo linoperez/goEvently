@@ -43,9 +43,12 @@ public class TicketTierController {
 
     @GetMapping("/{id}")
     public ResponseEntity<ApiResponse<TicketTierResponse>> getTierById(@PathVariable Long id) {
-        log.info("API Call: Get ticket tier by ID {}", id);
-        TicketTierResponse tier = ticketTierService.getTierById(id);
-        return ResponseEntity.ok(ApiResponse.success("Ticket tier retrieved", tier));
+        TicketTierResponse tier = ticketTierService.getTicketTierById(id);
+        return ResponseEntity.ok(ApiResponse.<TicketTierResponse>builder()
+                .success(true)
+                .message("Ticket tier retrieved successfully")
+                .data(tier)
+                .build());
     }
 
     @PutMapping("/{id}")
@@ -78,5 +81,7 @@ public class TicketTierController {
 
         return ResponseEntity.ok(ApiResponse.paginated("Paginated ticket tiers retrieved successfully", paginatedData));
     }
+
+
 
 }

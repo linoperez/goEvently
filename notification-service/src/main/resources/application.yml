@@ -8,7 +8,7 @@ spring:
   datasource:
     url: jdbc:mysql://localhost:3306/notification_db
     username: root
-    password: ${DB_PASSWORD:Sw@yam107}
+    password: ${DB_PASSWORD:sw@yam107}
     driver-class-name: com.mysql.cj.jdbc.Driver
 
   jpa:
@@ -21,8 +21,8 @@ spring:
         format_sql: true
 
   kafka:
-#    bootstrap-servers: localhost:9092
-    bootstrap-servers: kafka:29092
+    bootstrap-servers: localhost:9092
+#    bootstrap-servers: kafka:29092
     consumer:
       group-id: notification-service-group
       auto-offset-reset: earliest
