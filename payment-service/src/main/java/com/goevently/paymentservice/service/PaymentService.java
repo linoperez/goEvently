@@ -1,5 +1,6 @@
 package com.goevently.paymentservice.service;
 
+import com.goevently.paymentservice.client.BookingServiceClient;
 import com.goevently.paymentservice.client.RazorpayClient;
 import com.goevently.paymentservice.dto.*;
 import com.goevently.paymentservice.entity.Payment;
@@ -25,6 +26,9 @@ import java.util.Map;
 public class PaymentService {
 
     @Autowired
+    private BookingServiceClient bookingServiceClient;
+
+    @Autowired
     private PaymentRepository paymentRepository;
 
     @Autowired
@@ -36,57 +40,70 @@ public class PaymentService {
     /**
      * Initiate payment - Create Razorpay order
      */
-    public PaymentResponse initiatePayment(Long userId, PaymentRequest request) throws IOException {
-        log.info("Initiating payment for user: {}, booking: {}, amount: {}", userId, request.getBookingId(), request.getAmount());
+    // 1) Fetch booking from booking-service
+    public PaymentResponse initiatePayment(PaymentRequest request) {
 
-        // Check if payment already exists for this booking
-        if (paymentRepository.findByBookingId(request.getBookingId()).isPresent()) {
-            log.warn("Payment already exists for booking: {}", request.getBookingId());
-            throw new RuntimeException("Payment already exists for this booking");
+        // 1) Fetch booking
+        ApiResponse<BookingDto> bookingResp =
+                bookingServiceClient.getBookingById(request.getBookingId());
+
+        if (bookingResp == null || !Boolean.TRUE.equals(bookingResp.getSuccess())
+                || bookingResp.getData() == null) {
+            throw new RuntimeException("Invalid booking ID: " + request.getBookingId());
         }
 
-        // Create payment record in PENDING status
+        BookingDto booking = bookingResp.getData();
+
+        // 2) Validate booking state
+        if (!"PENDING_PAYMENT".equals(booking.getStatus())) {
+            throw new RuntimeException("Booking is not in PENDING_PAYMENT state");
+        }
+
+        // 3) Trusted data
+        BigDecimal amount = booking.getTotalAmount();
+        Long eventId = booking.getEventId();
+        Long userId = booking.getUserId();
+
+        if (amount == null) {
+            throw new RuntimeException("Booking amount is missing");
+        }
+
+        // 4) Create payment
         Payment payment = Payment.builder()
-                .bookingId(request.getBookingId())
+                .bookingId(booking.getId())
                 .userId(userId)
-                .eventId(request.getEventId())  // ADD THIS LINE
-                .amount(request.getAmount())
-                .currency(request.getCurrency())
-                .status(PaymentStatus.PENDING)
-                .paymentMethod(PaymentMethod.valueOf(request.getPaymentMethod().toUpperCase()))
+                .eventId(eventId)
+                .amount(amount)
+                .currency(booking.getCurrency())
+                .paymentMethod(PaymentMethod.valueOf(request.getPaymentMethod()))
+                .status(PaymentStatus.valueOf(PaymentStatus.INITIATED.toString())) // make sure enum exists
+                .createdAt(LocalDateTime.now())
                 .build();
 
         payment = paymentRepository.save(payment);
-        log.info("Payment record created with ID: {}", payment.getId());
 
-        // Create Razorpay order
-        Map<String, String> notes = new HashMap<>();
-        notes.put("bookingId", String.valueOf(payment.getBookingId()));
-        notes.put("userId", String.valueOf(userId));
-        notes.put("eventId", String.valueOf(payment.getEventId()));  // ADD THIS LINE
+        // 5) Create Razorpay order
+        RazorpayOrderRequest orderRequest = new RazorpayOrderRequest();
+        orderRequest.setAmount(amount.multiply(BigDecimal.valueOf(100)).longValue());
+        orderRequest.setCurrency(booking.getCurrency());
+        orderRequest.setReceipt(booking.getId().toString());
 
-        RazorpayOrderRequest orderRequest = RazorpayOrderRequest.builder()
-                .amount(payment.getAmount().multiply(BigDecimal.valueOf(100)).longValue())
-                .currency(payment.getCurrency())
-                .receipt("receipt_" + payment.getId())
-                .notes(notes)
-                .build();
+        RazorpayOrderResponse razorpayOrder;
 
         try {
-            RazorpayOrderResponse orderResponse = razorpayClient.createOrder(orderRequest);
-
-            payment.setGatewayTxnId(orderResponse.getId());
-            payment = paymentRepository.save(payment);
-
-            log.info("Razorpay order created. Order ID: {}", orderResponse.getId());
-
-            return mapToResponse(payment, orderResponse.getId());
+            razorpayOrder = razorpayClient.createOrder(orderRequest);
         } catch (IOException e) {
             log.error("Error creating Razorpay order", e);
-            payment.setStatus(PaymentStatus.FAILED);
-            paymentRepository.save(payment);
-            throw e;
+            throw new RuntimeException("Failed to create Razorpay order");
         }
+
+        String orderId = razorpayOrder.getId();
+
+        // Save gatewayTxnId
+        payment.setGatewayTxnId(orderId);
+        payment = paymentRepository.save(payment);
+
+        return mapToResponse(payment, orderId);
     }
 
 

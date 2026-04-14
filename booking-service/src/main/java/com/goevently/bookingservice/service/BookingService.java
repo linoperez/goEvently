@@ -39,10 +39,17 @@ public class BookingService {
      * Auth is centralized at Gateway, so we receive userId from headers in controller.
      */
     public BookingResponse createBooking(Long userId, BookingRequest request) {
+
         int quantity = request.resolvedQuantity();
+
+        // ✅ 0) Validate quantity
+        if (quantity <= 0) {
+            throw new RuntimeException("Quantity must be greater than 0");
+        }
 
         // 1) Fetch ticket tier from event-service
         ApiResponse<TicketTierDto> tierResp = eventServiceClient.getTicketTierById(request.getTicketTierId());
+
         if (tierResp == null || !Boolean.TRUE.equals(tierResp.getSuccess()) || tierResp.getData() == null) {
             throw new RuntimeException("Invalid ticket tier ID: " + request.getTicketTierId());
         }
@@ -54,8 +61,12 @@ public class BookingService {
             throw new RuntimeException("Ticket tier does not belong to eventId=" + request.getEventId());
         }
 
-        // 3) Validate availability
-        if (tier.getRemainingQuantity() == null || tier.getRemainingQuantity() < quantity) {
+        // ✅ 3) Validate availability (IMPORTANT)
+        if (tier.getRemainingQuantity() == null) {
+            throw new RuntimeException("Ticket tier availability not defined");
+        }
+
+        if (tier.getRemainingQuantity() < quantity) {
             throw new RuntimeException("Not enough seats available for this tier");
         }
 
@@ -63,14 +74,15 @@ public class BookingService {
         if (tier.getPrice() == null) {
             throw new RuntimeException("Ticket tier price missing");
         }
+
         BigDecimal totalAmount = tier.getPrice().multiply(BigDecimal.valueOf(quantity));
 
-        // 5) Create booking in PENDING_PAYMENT (industry standard)
+        // 5) Create booking in PENDING_PAYMENT
         Booking booking = Booking.builder()
                 .userId(userId)
                 .eventId(request.getEventId())
                 .ticketTierId(request.getTicketTierId())
-                .seats(quantity) // existing column
+                .seats(quantity)
                 .status(BookingStatus.PENDING_PAYMENT.toString())
                 .bookingTime(LocalDateTime.now())
                 .txnRef(UUID.randomUUID().toString())
@@ -80,13 +92,14 @@ public class BookingService {
 
         Booking saved = bookingRepository.save(booking);
 
+        // 6) Send Kafka event
         BookingMessage message = BookingMessage.builder()
                 .id(saved.getId())
                 .userId(saved.getUserId())
                 .eventId(saved.getEventId())
                 .ticketTierId(saved.getTicketTierId())
                 .quantity(saved.getSeats())
-                .seats(saved.getSeats()) // backward compatibility
+                .seats(saved.getSeats())
                 .status(saved.getStatus())
                 .totalAmount(saved.getTotalAmount())
                 .currency(saved.getCurrency())
@@ -118,11 +131,22 @@ public class BookingService {
         Booking booking = bookingRepository.findById(bookingId)
                 .orElseThrow(() -> new RuntimeException("Booking not found with ID: " + bookingId));
 
+        // ✅ IDEMPOTENCY CHECK
+        if (BookingStatus.CONFIRMED.toString().equals(booking.getStatus())) {
+            return mapToResponse(booking); // already confirmed, no duplicate processing
+        }
+
+        // Optional safety: don't confirm already failed bookings
+        if (BookingStatus.FAILED.toString().equals(booking.getStatus())) {
+            throw new RuntimeException("Cannot confirm a failed booking");
+        }
+
         booking.setStatus(BookingStatus.CONFIRMED.toString());
         booking.setPaymentId(paymentId);
 
         Booking updatedBooking = bookingRepository.save(booking);
 
+        // ✅ Send Kafka event ONLY once (after idempotency check)
         BookingMessage message = BookingMessage.builder()
                 .id(updatedBooking.getId())
                 .userId(updatedBooking.getUserId())
@@ -167,7 +191,18 @@ public class BookingService {
         Booking booking = bookingRepository.findById(bookingId)
                 .orElseThrow(() -> new RuntimeException("Booking not found with ID: " + bookingId));
 
+        // ✅ IDEMPOTENCY CHECK
+        if (BookingStatus.FAILED.toString().equals(booking.getStatus())) {
+            return mapToResponse(booking); // already failed
+        }
+
+        // Optional: prevent overriding confirmed booking
+        if (BookingStatus.CONFIRMED.toString().equals(booking.getStatus())) {
+            throw new RuntimeException("Cannot fail a confirmed booking");
+        }
+
         booking.setStatus(BookingStatus.FAILED.toString());
+
         Booking updatedBooking = bookingRepository.save(booking);
 
         return mapToResponse(updatedBooking);

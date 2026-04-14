@@ -6,5 +6,6 @@ public enum PaymentStatus {
     FAILED,       // Payment failed
     CANCELLED,    // User cancelled payment
     REFUNDED,     // Payment refunded
-    EXPIRED       // Payment link expired
+    EXPIRED,       // Payment link expired
+    INITIATED
 }

@@ -9,18 +9,16 @@ import com.goevently.eventservice.entity.TicketTier;
 import com.goevently.eventservice.exception.EventException;
 import com.goevently.eventservice.repository.EventRepository;
 import com.goevently.eventservice.repository.TicketTierRepository;
-import com.goevently.eventservice.util.TicketTierMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
-
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 
 @Service
 @Slf4j
@@ -28,16 +26,14 @@ public class TicketTierService {
 
     private final TicketTierRepository ticketTierRepository;
     private final EventRepository eventRepository;
-    private final TicketTierMapper ticketTierMapper;
 
     @Autowired
     private KafkaProducerService kafkaProducerService;
 
     @Autowired
-    public TicketTierService(TicketTierRepository ticketTierRepository, EventRepository eventRepository, TicketTierMapper ticketTierMapper) {
+    public TicketTierService(TicketTierRepository ticketTierRepository, EventRepository eventRepository) {
         this.ticketTierRepository = ticketTierRepository;
         this.eventRepository = eventRepository;
-        this.ticketTierMapper = ticketTierMapper;
     }
 
     @Transactional
@@ -45,13 +41,18 @@ public class TicketTierService {
         Event event = eventRepository.findById(request.getEventId())
                 .orElseThrow(() -> new EventException("Event not found with ID: " + request.getEventId()));
 
-        TicketTier tier = ticketTierMapper.toEntity(request, event);
+        TicketTier tier = new TicketTier();
+        tier.setEvent(event);
+        tier.setName(request.getName());
+        tier.setPrice(request.getPrice());
+        tier.setTotalQuantity(request.getTotalQuantity());
+        tier.setRemainingQuantity(request.getTotalQuantity());
+        tier.setDescription(request.getDescription());
+
         TicketTier savedTier = ticketTierRepository.save(tier);
 
+        TicketTierResponse response = mapToResponse(savedTier);
 
-        TicketTierResponse response = ticketTierMapper.toResponse(savedTier);
-
-        // NEW: Send Kafka message
         kafkaProducerService.sendTicketTierCreated(response);
 
         log.info("Created new ticket tier '{}' for event '{}'", savedTier.getName(), event.getName());
@@ -62,14 +63,8 @@ public class TicketTierService {
     public List<TicketTierResponse> getTiersByEvent(Long eventId) {
         return ticketTierRepository.findByEventId(eventId)
                 .stream()
-                .map(ticketTierMapper::toResponse)
+                .map(this::mapToResponse)
                 .collect(Collectors.toList());
-    }
-
-    public TicketTierResponse getTierById(Long id) {
-        TicketTier tier = ticketTierRepository.findById(id)
-                .orElseThrow(() -> new EventException("Ticket tier not found with ID: " + id));
-        return ticketTierMapper.toResponse(tier);
     }
 
     @Transactional
@@ -77,35 +72,45 @@ public class TicketTierService {
         TicketTier tier = ticketTierRepository.findById(id)
                 .orElseThrow(() -> new EventException("Ticket tier not found with ID: " + id));
 
-        if (request.getName() != null) tier.setName(request.getName());
-        if (request.getPrice() != null) tier.setPrice(request.getPrice());
+        if (request.getName() != null) {
+            tier.setName(request.getName());
+        }
+
+        if (request.getPrice() != null) {
+            tier.setPrice(request.getPrice());
+        }
+
         if (request.getTotalQuantity() != null) {
             int diff = request.getTotalQuantity() - tier.getTotalQuantity();
             tier.setTotalQuantity(request.getTotalQuantity());
             tier.setRemainingQuantity(Math.max(0, tier.getRemainingQuantity() + diff));
         }
-        if (request.getDescription() != null) tier.setDescription(request.getDescription());
+
+        if (request.getDescription() != null) {
+            tier.setDescription(request.getDescription());
+        }
 
         TicketTier updated = ticketTierRepository.save(tier);
         log.info("Updated ticket tier '{}'", updated.getName());
-        return ticketTierMapper.toResponse(updated);
+
+        return mapToResponse(updated);
     }
 
     @Transactional
     public void deleteTier(Long id) {
         TicketTier tier = ticketTierRepository.findById(id)
                 .orElseThrow(() -> new EventException("Ticket tier not found with ID: " + id));
+
         ticketTierRepository.delete(tier);
         log.info("Deleted ticket tier '{}'", tier.getName());
     }
-
 
     public PaginatedResponse<TicketTierResponse> getTiersByEventPaginated(Long eventId, int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
         Page<TicketTier> tierPage = ticketTierRepository.findByEventId(eventId, pageable);
 
         List<TicketTierResponse> content = tierPage.getContent().stream()
-                .map(ticketTierMapper::toResponse)
+                .map(this::mapToResponse)
                 .collect(Collectors.toList());
 
         return PaginatedResponse.<TicketTierResponse>builder()
@@ -120,20 +125,15 @@ public class TicketTierService {
 
     public TicketTierResponse getTicketTierById(Long id) {
         TicketTier tier = ticketTierRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Ticket tier not found with id: " + id));
+                .orElseThrow(() -> new EventException("Ticket tier not found with ID: " + id));
+
         return mapToResponse(tier);
     }
 
     private TicketTierResponse mapToResponse(TicketTier tier) {
         TicketTierResponse response = new TicketTierResponse();
         response.setId(tier.getId());
-
-        // null-safe and lazy-safe enough for current flow
-        if (tier.getEvent() != null) {
-            response.setEventId(tier.getEvent().getId());
-        } else {
-            response.setEventId(null);
-        }
+        response.setEventId(tier.getEvent() != null ? tier.getEvent().getId() : null);
         response.setName(tier.getName());
         response.setPrice(tier.getPrice());
         response.setTotalQuantity(tier.getTotalQuantity());
@@ -141,7 +141,6 @@ public class TicketTierService {
         response.setDescription(tier.getDescription());
         response.setCreatedAt(tier.getCreatedAt());
         response.setUpdatedAt(tier.getUpdatedAt());
-
         return response;
     }
 }

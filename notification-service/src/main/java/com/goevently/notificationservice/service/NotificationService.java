@@ -39,6 +39,31 @@ public class NotificationService {
     /**
      * Send notification when event is created
      */
+
+
+    public Notification createNotification(Long userId,
+                                           Long eventId,
+                                           com.goevently.notificationservice.entity.NotificationType notificationType,
+                                           String title,
+                                           String message,
+                                           String recipient,
+                                           com.goevently.notificationservice.entity.NotificationStatus status) {
+        Notification notification = new Notification();
+        notification.setUserId(userId);
+        notification.setEventId(eventId);
+        notification.setNotificationType(notificationType);
+        notification.setTitle(title);
+        notification.setMessage(message);
+        notification.setRecipient(recipient);
+        notification.setStatus(status);
+
+        if (status == com.goevently.notificationservice.entity.NotificationStatus.SENT) {
+            notification.setSentAt(java.time.LocalDateTime.now());
+        }
+
+        return notificationRepository.save(notification);
+    }
+
     public void sendEventCreatedNotification(EventMessage event) {
         log.info("Sending event created notification for event: {}", event.getName());
 

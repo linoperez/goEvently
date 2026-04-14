@@ -4,35 +4,28 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="7c55ebb2-c1d5-48b0-b1df-ef955f13f4e0" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/booking-service/src/main/java/com/goevently/bookingservice/client/EventServiceClient.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/booking-service/src/main/java/com/goevently/bookingservice/dto/TicketTierDto.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/booking-service/src/main/java/com/goevently/bookingservice/service/TicketTierService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/3 Month Plan.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/Documentation.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_19-01-2026_21_29_[Changes]/shelved.patch" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_19-01-2026_21_29__Changes_.xml" beforeDir="false" />
+    <list default="true" id="7c55ebb2-c1d5-48b0-b1df-ef955f13f4e0" name="Changes" comment="Updated auth, event and booking serivces.">
+      <change afterPath="$PROJECT_DIR$/booking-service/src/main/java/com/goevently/bookingservice/dto/PaymentEvent.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/booking-service/src/main/java/com/goevently/bookingservice/service/KafkaConsumerService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/notification-service/src/main/java/com/goevently/notificationservice/dto/BookingEvent.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/notification-service/src/main/java/com/goevently/notificationservice/dto/PaymentEvent.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/notification-service/src/main/java/com/goevently/notificationservice/service/KafkaConsumerService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/payment-service/src/main/java/com/goevently/paymentservice/client/BookingServiceClient.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/payment-service/src/main/java/com/goevently/paymentservice/dto/BookingDto.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api-gateway/src/main/java/com/goevently/apigateway/config/GatewayConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/api-gateway/src/main/java/com/goevently/apigateway/config/GatewayConfig.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api-gateway/src/main/java/com/goevently/apigateway/filter/JwtAuthenticationFilter.java" beforeDir="false" afterPath="$PROJECT_DIR$/api-gateway/src/main/java/com/goevently/apigateway/filter/JwtAuthenticationFilter.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api-gateway/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/api-gateway/src/main/resources/application.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/auth-service/src/main/java/com/goevently/authservice/dto/LoginRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/auth-service/src/main/java/com/goevently/authservice/dto/LoginRequest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/auth-service/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/auth-service/src/main/resources/application.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/booking-service/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/booking-service/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/booking-service/src/main/java/com/goevently/bookingservice/BookingServiceApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/booking-service/src/main/java/com/goevently/bookingservice/BookingServiceApplication.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/booking-service/src/main/java/com/goevently/bookingservice/controller/BookingController.java" beforeDir="false" afterPath="$PROJECT_DIR$/booking-service/src/main/java/com/goevently/bookingservice/controller/BookingController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/booking-service/src/main/java/com/goevently/bookingservice/dto/BookingMessage.java" beforeDir="false" afterPath="$PROJECT_DIR$/booking-service/src/main/java/com/goevently/bookingservice/dto/BookingMessage.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/booking-service/src/main/java/com/goevently/bookingservice/dto/BookingRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/booking-service/src/main/java/com/goevently/bookingservice/dto/BookingRequest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/booking-service/src/main/java/com/goevently/bookingservice/dto/BookingResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/booking-service/src/main/java/com/goevently/bookingservice/dto/BookingResponse.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/booking-service/src/main/java/com/goevently/bookingservice/entity/Booking.java" beforeDir="false" afterPath="$PROJECT_DIR$/booking-service/src/main/java/com/goevently/bookingservice/entity/Booking.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/booking-service/src/main/java/com/goevently/bookingservice/entity/BookingStatus.java" beforeDir="false" afterPath="$PROJECT_DIR$/booking-service/src/main/java/com/goevently/bookingservice/entity/BookingStatus.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/booking-service/src/main/java/com/goevently/bookingservice/config/KafkaConsumerConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/booking-service/src/main/java/com/goevently/bookingservice/config/KafkaConsumerConfig.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/booking-service/src/main/java/com/goevently/bookingservice/service/BookingService.java" beforeDir="false" afterPath="$PROJECT_DIR$/booking-service/src/main/java/com/goevently/bookingservice/service/BookingService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/booking-service/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/booking-service/src/main/resources/application.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/event-service/src/main/java/com/goevently/eventservice/controller/TicketTierController.java" beforeDir="false" afterPath="$PROJECT_DIR$/event-service/src/main/java/com/goevently/eventservice/controller/TicketTierController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/event-service/src/main/java/com/goevently/eventservice/config/SecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/event-service/src/main/java/com/goevently/eventservice/config/SecurityConfig.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/event-service/src/main/java/com/goevently/eventservice/service/TicketTierService.java" beforeDir="false" afterPath="$PROJECT_DIR$/event-service/src/main/java/com/goevently/eventservice/service/TicketTierService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/event-service/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/event-service/src/main/resources/application.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/notification-service/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/notification-service/src/main/resources/application.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/event-service/src/main/java/com/goevently/eventservice/util/TicketTierMapper.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/notification-service/src/main/java/com/goevently/notificationservice/config/KafkaConsumerConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/notification-service/src/main/java/com/goevently/notificationservice/config/KafkaConsumerConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/notification-service/src/main/java/com/goevently/notificationservice/service/NotificationService.java" beforeDir="false" afterPath="$PROJECT_DIR$/notification-service/src/main/java/com/goevently/notificationservice/service/NotificationService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/payment-service/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/payment-service/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/payment-service/src/main/java/com/goevently/paymentservice/PaymentServiceApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/payment-service/src/main/java/com/goevently/paymentservice/PaymentServiceApplication.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/payment-service/src/main/java/com/goevently/paymentservice/controller/PaymentController.java" beforeDir="false" afterPath="$PROJECT_DIR$/payment-service/src/main/java/com/goevently/paymentservice/controller/PaymentController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/payment-service/src/main/java/com/goevently/paymentservice/dto/PaymentRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/payment-service/src/main/java/com/goevently/paymentservice/dto/PaymentRequest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/payment-service/src/main/java/com/goevently/paymentservice/entity/PaymentStatus.java" beforeDir="false" afterPath="$PROJECT_DIR$/payment-service/src/main/java/com/goevently/paymentservice/entity/PaymentStatus.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/payment-service/src/main/java/com/goevently/paymentservice/service/PaymentService.java" beforeDir="false" afterPath="$PROJECT_DIR$/payment-service/src/main/java/com/goevently/paymentservice/service/PaymentService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/payment-service/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/payment-service/src/main/resources/application.yml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -117,7 +110,7 @@
     &quot;jdk.selected.JAVA_MODULE&quot;: &quot;corretto-17&quot;,
     &quot;junie.onboarding.icon.badge.shown&quot;: &quot;true&quot;,
     &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;F:/D/Java/springboot/goevently/backend&quot;,
+    &quot;last_opened_file_path&quot;: &quot;F:/D/Java/springboot/goevently/backend/notification-service/src/main/java/com/goevently/notificationservice/config/KafkaConsumerConfig2.java&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
@@ -130,6 +123,7 @@
     &quot;settings.editor.selected.configurable&quot;: &quot;editor.preferences.fonts.default&quot;,
     &quot;spring.configuration.checksum&quot;: &quot;a034093b9774fcb89a4c95af8890a6ab&quot;,
     &quot;to.speed.mode.migration.done&quot;: &quot;true&quot;,
+    &quot;two.files.diff.last.used.file&quot;: &quot;F:/D/Java/springboot/goevently/backend/notification-service/src/main/java/com/goevently/notificationservice/config/KafkaConsumerConfig2.java&quot;,
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   },
   &quot;keyToStringList&quot;: {
@@ -154,7 +148,7 @@
       </set>
     </option>
   </component>
-  <component name="RunManager" selected="Spring Boot.BookingService - Local">
+  <component name="RunManager" selected="Spring Boot.PaymentService - Local">
     <configuration name="ApiGateway - Local" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" temporary="true">
       <option name="ACTIVE_PROFILES" value="local" />
       <module name="api-gateway" />
@@ -241,8 +235,8 @@
     <recent_temporary>
       <list>
         <item itemvalue="Spring Boot.EventService - Local" />
-        <item itemvalue="Spring Boot.ApiGateway - Local" />
         <item itemvalue="Spring Boot.EurekaServer - Local" />
+        <item itemvalue="Spring Boot.ApiGateway - Local" />
       </list>
     </recent_temporary>
   </component>
@@ -352,7 +346,21 @@
       <workItem from="1772120567820" duration="5797000" />
       <workItem from="1772466578102" duration="16016000" />
       <workItem from="1773150295892" duration="5631000" />
-      <workItem from="1773245153686" duration="3697000" />
+      <workItem from="1773245153686" duration="7571000" />
+      <workItem from="1773323894925" duration="7149000" />
+      <workItem from="1773465391878" duration="1719000" />
+      <workItem from="1773467989836" duration="3290000" />
+      <workItem from="1774167844363" duration="10976000" />
+      <workItem from="1774281649474" duration="4592000" />
+      <workItem from="1774364892838" duration="3781000" />
+      <workItem from="1774452514868" duration="2145000" />
+      <workItem from="1774548665377" duration="2411000" />
+      <workItem from="1774684157587" duration="1883000" />
+      <workItem from="1774879350411" duration="7580000" />
+      <workItem from="1775574911743" duration="1556000" />
+      <workItem from="1775659026337" duration="5056000" />
+      <workItem from="1775995512944" duration="1652000" />
+      <workItem from="1776183698849" duration="2318000" />
     </task>
     <task id="LOCAL-00001" summary="I think everything until week 6">
       <option name="closed" value="true" />
@@ -410,7 +418,15 @@
       <option name="project" value="LOCAL" />
       <updated>1768839086024</updated>
     </task>
-    <option name="localTasksCounter" value="8" />
+    <task id="LOCAL-00008" summary="Updated auth, event and booking serivces.">
+      <option name="closed" value="true" />
+      <created>1773249189082</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1773249189082</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -430,7 +446,8 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="I think everything until week 6" />
     <MESSAGE value="Implemented all basic microservices." />
-    <option name="LAST_COMMIT_MESSAGE" value="Implemented all basic microservices." />
+    <MESSAGE value="Updated auth, event and booking serivces." />
+    <option name="LAST_COMMIT_MESSAGE" value="Updated auth, event and booking serivces." />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

@@ -5,14 +5,12 @@ import com.goevently.paymentservice.dto.PaymentRequest;
 import com.goevently.paymentservice.dto.PaymentResponse;
 import com.goevently.paymentservice.service.PaymentService;
 import com.goevently.paymentservice.util.JwtTokenUtil;
-import io.jsonwebtoken.Claims;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -26,9 +24,6 @@ public class PaymentController {
 
     @Autowired
     private PaymentService paymentService;
-
-    @Autowired
-    private JwtTokenUtil jwtTokenUtil;
 
     /**
      * Initiate a new payment
@@ -47,29 +42,20 @@ public class PaymentController {
     @PostMapping
     public ResponseEntity<ApiResponse<PaymentResponse>> initiatePayment(
             @Valid @RequestBody PaymentRequest request,
-            @RequestHeader(HttpHeaders.AUTHORIZATION) String authHeader) throws IOException {
+            @RequestHeader(value = "X-User-Id", required = false) Long userId,
+            @RequestHeader(value = "X-User-Role", required = false) String role
+    ) {
 
-        log.info("Received payment initiation request for booking: {}", request.getBookingId());
+        log.info("Received payment initiation request for booking: {} by user: {}",
+                request.getBookingId(), userId);
 
-        // Extract and validate JWT
-        String token = jwtTokenUtil.extractTokenFromHeader(authHeader);
-        if (token == null) {
-            log.error("Missing or invalid Authorization header");
-            throw new RuntimeException("Missing or invalid Authorization header");
-        }
-
-        Claims claims = jwtTokenUtil.validateAndParseToken(token);
-        Long userId = jwtTokenUtil.getUserIdFromClaims(claims);
-
-        log.info("Initiating payment for user: {}", userId);
-
-        // Initiate payment
-        PaymentResponse payment = paymentService.initiatePayment(userId, request);
+        // Call service (no JWT here anymore)
+        PaymentResponse payment = paymentService.initiatePayment(request);
 
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(ApiResponse.<PaymentResponse>builder()
                         .success(true)
-                        .message("Payment initiated successfully. Please complete payment using Razorpay order ID.")
+                        .message("Payment initiated successfully")
                         .data(payment)
                         .build());
     }

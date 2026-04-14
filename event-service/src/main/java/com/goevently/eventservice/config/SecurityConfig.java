@@ -1,6 +1,7 @@
 package com.goevently.eventservice.config;
 
 import com.goevently.eventservice.filter.JwtAuthFilter;
+import jakarta.ws.rs.HttpMethod;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -35,7 +36,12 @@ public class SecurityConfig {
         http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(authorize -> authorize
-                        // All endpoints in this service require authentication
+                        .requestMatchers(HttpMethod.GET,
+                                "/api/events/**",
+                                "/api/venues/**",
+                                "/api/categories/**",
+                                "/api/ticket-tiers/**"
+                        ).permitAll()
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
