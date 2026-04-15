@@ -28,12 +28,6 @@ public class NotificationService {
     private NotificationRepository notificationRepository;
 
     @Autowired
-    private EmailNotificationService emailService;
-
-    @Autowired
-    private SmsNotificationService smsService;
-
-    @Autowired
     private InAppNotificationService inAppService;
 
     /**
@@ -64,125 +58,9 @@ public class NotificationService {
         return notificationRepository.save(notification);
     }
 
-    public void sendEventCreatedNotification(EventMessage event) {
-        log.info("Sending event created notification for event: {}", event.getName());
 
-        // Send email to organizer
-        String subject = "Event Created Successfully";
-        String emailBody = String.format(
-                "Your event '%s' has been created successfully!\\nDate: %s\\nLocation: %s",
-                event.getName(), event.getStartTime(), event.getLocation()
-        );
 
-        try {
-            Notification notification = Notification.builder()
-                    .eventId(event.getId())
-                    .userId(1L)  // Organizer ID would be passed from event context
-                    .notificationType(NotificationType.EMAIL)
-                    .title(subject)
-                    .message(emailBody)
-                    .recipient(event.getOrganizerUsername())
-                    .status(NotificationStatus.PENDING)
-                    .build();
 
-            Notification saved = notificationRepository.save(notification);
-            emailService.sendEmail(saved);
-
-        } catch (Exception e) {
-            log.error("Error sending event created notification for event: {}", event.getId(), e);
-        }
-    }
-
-    /**
-     * Send notification when event is updated
-     */
-    public void sendEventUpdatedNotification(EventMessage event) {
-        log.info("Sending event updated notification for event: {}", event.getName());
-
-        String subject = "Event Updated";
-        String emailBody = String.format(
-                "The event '%s' has been updated.\\nNew Date: %s\\nNew Location: %s",
-                event.getName(), event.getStartTime(), event.getLocation()
-        );
-
-        try {
-            Notification notification = Notification.builder()
-                    .eventId(event.getId())
-                    .userId(1L)
-                    .notificationType(NotificationType.EMAIL)
-                    .title(subject)
-                    .message(emailBody)
-                    .recipient(event.getOrganizerUsername())
-                    .status(NotificationStatus.PENDING)
-                    .build();
-
-            Notification saved = notificationRepository.save(notification);
-            emailService.sendEmail(saved);
-
-        } catch (Exception e) {
-            log.error("Error sending event updated notification for event: {}", event.getId(), e);
-        }
-    }
-
-    /**
-     * Send notification when event is deleted
-     */
-    public void sendEventDeletedNotification(EventMessage event) {
-        log.info("Sending event deleted notification for event: {}", event.getName());
-
-        String subject = "Event Cancelled";
-        String emailBody = String.format(
-                "The event '%s' has been cancelled.\\nWe apologize for any inconvenience.",
-                event.getName()
-        );
-
-        try {
-            Notification notification = Notification.builder()
-                    .eventId(event.getId())
-                    .userId(1L)
-                    .notificationType(NotificationType.EMAIL)
-                    .title(subject)
-                    .message(emailBody)
-                    .recipient(event.getOrganizerUsername())
-                    .status(NotificationStatus.PENDING)
-                    .build();
-
-            Notification saved = notificationRepository.save(notification);
-            emailService.sendEmail(saved);
-
-        } catch (Exception e) {
-            log.error("Error sending event deleted notification for event: {}", event.getId(), e);
-        }
-    }
-
-    /**
-     * Send SMS notification
-     */
-    public void sendSmsNotification(EventMessage event, String eventAction) {
-        log.info("Sending SMS notification for event: {} - Action: {}", event.getName(), eventAction);
-
-        String message = String.format(
-                "GoEvently: %s '%s' on %s at %s",
-                eventAction, event.getName(), event.getStartTime().toLocalDate(), event.getLocation()
-        );
-
-        try {
-            Notification notification = Notification.builder()
-                    .eventId(event.getId())
-                    .userId(1L)
-                    .notificationType(NotificationType.SMS)
-                    .title(eventAction)
-                    .message(message)
-                    .status(NotificationStatus.PENDING)
-                    .build();
-
-            Notification saved = notificationRepository.save(notification);
-            smsService.sendSms(saved);
-
-        } catch (Exception e) {
-            log.error("Error sending SMS notification for event: {}", event.getId(), e);
-        }
-    }
 
     /**
      * Send in-app notification
@@ -270,28 +148,7 @@ public class NotificationService {
         log.error("Marked notification {} as FAILED. Error: {}", notificationId, errorMessage);
     }
 
-    /**
-     * Retry failed notifications
-     */
-    public void retryFailedNotifications() {
-        log.info("Retrying failed notifications...");
-        List<Notification> failedNotifications = notificationRepository
-                .findByStatusAndRetryCountLessThan(NotificationStatus.FAILED, 3);
 
-        failedNotifications.forEach(notification -> {
-            try {
-                if (notification.getNotificationType() == NotificationType.EMAIL) {
-                    emailService.sendEmail(notification);
-                } else if (notification.getNotificationType() == NotificationType.SMS) {
-                    smsService.sendSms(notification);
-                }
-            } catch (Exception e) {
-                log.error("Error retrying notification: {}", notification.getId(), e);
-            }
-        });
-
-        log.info("Completed retry for {} failed notifications", failedNotifications.size());
-    }
 
     /**
      * Convert Notification entity to NotificationResponse DTO

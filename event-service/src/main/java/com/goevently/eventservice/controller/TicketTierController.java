@@ -82,6 +82,32 @@ public class TicketTierController {
         return ResponseEntity.ok(ApiResponse.paginated("Paginated ticket tiers retrieved successfully", paginatedData));
     }
 
+    @PostMapping("/{id}/reserve")
+    public ResponseEntity<ApiResponse<Void>> reserveQuantity(
+            @PathVariable Long id,
+            @RequestParam int quantity
+    ) {
+        ticketTierService.reserveQuantity(id, quantity);
+
+        return ResponseEntity.ok(ApiResponse.<Void>builder()
+                .success(true)
+                .message("Quantity reserved successfully")
+                .build());
+    }
+
+    @PostMapping("/{id}/release")
+    public ResponseEntity<ApiResponse<Void>> releaseQuantity(
+            @PathVariable Long id,
+            @RequestParam int quantity
+    ) {
+        ticketTierService.releaseQuantity(id, quantity);
+
+        return ResponseEntity.ok(ApiResponse.<Void>builder()
+                .success(true)
+                .message("Quantity released successfully")
+                .build());
+    }
+
 
 
 }

@@ -105,6 +105,28 @@ public class TicketTierService {
         log.info("Deleted ticket tier '{}'", tier.getName());
     }
 
+    @Transactional
+    public void reserveQuantity(Long tierId, int quantity) {
+        TicketTier tier = ticketTierRepository.findById(tierId)
+                .orElseThrow(() -> new RuntimeException("Ticket tier not found"));
+
+        if (tier.getRemainingQuantity() < quantity) {
+            throw new RuntimeException("Not enough seats available");
+        }
+
+        tier.setRemainingQuantity(tier.getRemainingQuantity() - quantity);
+        ticketTierRepository.save(tier);
+    }
+
+    @Transactional
+    public void releaseQuantity(Long tierId, int quantity) {
+        TicketTier tier = ticketTierRepository.findById(tierId)
+                .orElseThrow(() -> new RuntimeException("Ticket tier not found"));
+
+        tier.setRemainingQuantity(tier.getRemainingQuantity() + quantity);
+        ticketTierRepository.save(tier);
+    }
+
     public PaginatedResponse<TicketTierResponse> getTiersByEventPaginated(Long eventId, int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
         Page<TicketTier> tierPage = ticketTierRepository.findByEventId(eventId, pageable);

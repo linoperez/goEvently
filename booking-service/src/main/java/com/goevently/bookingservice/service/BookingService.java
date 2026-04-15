@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.goevently.bookingservice.client.EventServiceClient;
 import com.goevently.bookingservice.dto.ApiResponse;
 import com.goevently.bookingservice.dto.TicketTierDto;
+import com.goevently.bookingservice.dto.TierLock;
 import java.math.BigDecimal;
 import java.util.UUID;
 
@@ -34,6 +35,9 @@ public class BookingService {
     @Autowired
     private EventServiceClient eventServiceClient;
 
+    @Autowired
+    private LockService lockService;
+
     /**
      * Phase 1 Step 1: Create a new booking using (eventId + ticketTierId + quantity).
      * Auth is centralized at Gateway, so we receive userId from headers in controller.
@@ -42,12 +46,35 @@ public class BookingService {
 
         int quantity = request.resolvedQuantity();
 
-        // ✅ 0) Validate quantity
+        // 0) Validate quantity
         if (quantity <= 0) {
             throw new RuntimeException("Quantity must be greater than 0");
         }
 
-        // 1) Fetch ticket tier from event-service
+        // 1) Validate lock
+        TierLock lock = lockService.getLock(request.getLockId());
+
+        if (lock == null) {
+            throw new RuntimeException("Lock not found or expired");
+        }
+
+        if (lock.getUserId() == null || !lock.getUserId().equals(userId)) {
+            throw new RuntimeException("Lock does not belong to this user");
+        }
+
+        if (lock.getEventId() == null || !lock.getEventId().equals(request.getEventId())) {
+            throw new RuntimeException("Lock event does not match booking request");
+        }
+
+        if (lock.getTicketTierId() == null || !lock.getTicketTierId().equals(request.getTicketTierId())) {
+            throw new RuntimeException("Lock ticket tier does not match booking request");
+        }
+
+        if (lock.getQuantity() == null || lock.getQuantity() != quantity) {
+            throw new RuntimeException("Lock quantity does not match booking request");
+        }
+
+        // 2) Fetch ticket tier from event-service
         ApiResponse<TicketTierDto> tierResp = eventServiceClient.getTicketTierById(request.getTicketTierId());
 
         if (tierResp == null || !Boolean.TRUE.equals(tierResp.getSuccess()) || tierResp.getData() == null) {
@@ -56,18 +83,9 @@ public class BookingService {
 
         TicketTierDto tier = tierResp.getData();
 
-        // 2) Validate tier belongs to the event
+        // 3) Validate tier belongs to the event
         if (tier.getEventId() == null || !tier.getEventId().equals(request.getEventId())) {
             throw new RuntimeException("Ticket tier does not belong to eventId=" + request.getEventId());
-        }
-
-        // ✅ 3) Validate availability (IMPORTANT)
-        if (tier.getRemainingQuantity() == null) {
-            throw new RuntimeException("Ticket tier availability not defined");
-        }
-
-        if (tier.getRemainingQuantity() < quantity) {
-            throw new RuntimeException("Not enough seats available for this tier");
         }
 
         // 4) Compute total (server-side)
@@ -82,6 +100,7 @@ public class BookingService {
                 .userId(userId)
                 .eventId(request.getEventId())
                 .ticketTierId(request.getTicketTierId())
+                .lockId(request.getLockId())
                 .seats(quantity)
                 .status(BookingStatus.PENDING_PAYMENT.toString())
                 .bookingTime(LocalDateTime.now())
@@ -92,13 +111,14 @@ public class BookingService {
 
         Booking saved = bookingRepository.save(booking);
 
-        // 6) Send Kafka event
+        // 6) Publish booking-created
         BookingMessage message = BookingMessage.builder()
                 .id(saved.getId())
                 .userId(saved.getUserId())
                 .eventId(saved.getEventId())
                 .ticketTierId(saved.getTicketTierId())
                 .quantity(saved.getSeats())
+                .lockId(saved.getLockId())
                 .seats(saved.getSeats())
                 .status(saved.getStatus())
                 .totalAmount(saved.getTotalAmount())
@@ -131,12 +151,10 @@ public class BookingService {
         Booking booking = bookingRepository.findById(bookingId)
                 .orElseThrow(() -> new RuntimeException("Booking not found with ID: " + bookingId));
 
-        // ✅ IDEMPOTENCY CHECK
         if (BookingStatus.CONFIRMED.toString().equals(booking.getStatus())) {
-            return mapToResponse(booking); // already confirmed, no duplicate processing
+            return mapToResponse(booking);
         }
 
-        // Optional safety: don't confirm already failed bookings
         if (BookingStatus.FAILED.toString().equals(booking.getStatus())) {
             throw new RuntimeException("Cannot confirm a failed booking");
         }
@@ -146,16 +164,23 @@ public class BookingService {
 
         Booking updatedBooking = bookingRepository.save(booking);
 
-        // ✅ Send Kafka event ONLY once (after idempotency check)
+        // Lock no longer needed after successful payment.
+        if (updatedBooking.getLockId() != null && !updatedBooking.getLockId().isBlank()) {
+            lockService.deleteLockOnly(updatedBooking.getLockId());
+        }
+
         BookingMessage message = BookingMessage.builder()
                 .id(updatedBooking.getId())
                 .userId(updatedBooking.getUserId())
                 .eventId(updatedBooking.getEventId())
                 .ticketTierId(updatedBooking.getTicketTierId())
                 .quantity(updatedBooking.getSeats())
+                .lockId(updatedBooking.getLockId())
                 .seats(updatedBooking.getSeats())
                 .status(updatedBooking.getStatus())
                 .paymentId(updatedBooking.getPaymentId())
+                .totalAmount(updatedBooking.getTotalAmount())
+                .currency(updatedBooking.getCurrency())
                 .bookingTime(updatedBooking.getBookingTime())
                 .build();
 
@@ -191,19 +216,20 @@ public class BookingService {
         Booking booking = bookingRepository.findById(bookingId)
                 .orElseThrow(() -> new RuntimeException("Booking not found with ID: " + bookingId));
 
-        // ✅ IDEMPOTENCY CHECK
         if (BookingStatus.FAILED.toString().equals(booking.getStatus())) {
-            return mapToResponse(booking); // already failed
+            return mapToResponse(booking);
         }
 
-        // Optional: prevent overriding confirmed booking
         if (BookingStatus.CONFIRMED.toString().equals(booking.getStatus())) {
             throw new RuntimeException("Cannot fail a confirmed booking");
         }
 
         booking.setStatus(BookingStatus.FAILED.toString());
-
         Booking updatedBooking = bookingRepository.save(booking);
+
+        if (updatedBooking.getLockId() != null && !updatedBooking.getLockId().isBlank()) {
+            lockService.releaseLock(updatedBooking.getLockId());
+        }
 
         return mapToResponse(updatedBooking);
     }
@@ -215,6 +241,7 @@ public class BookingService {
                 .eventId(booking.getEventId())
                 .ticketTierId(booking.getTicketTierId())
                 .quantity(booking.getSeats())
+                .lockId(booking.getLockId())
                 .status(booking.getStatus())
                 .paymentId(booking.getPaymentId())
                 .txnRef(booking.getTxnRef())

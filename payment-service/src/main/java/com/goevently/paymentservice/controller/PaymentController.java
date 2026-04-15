@@ -4,7 +4,6 @@ import com.goevently.paymentservice.dto.ApiResponse;
 import com.goevently.paymentservice.dto.PaymentRequest;
 import com.goevently.paymentservice.dto.PaymentResponse;
 import com.goevently.paymentservice.service.PaymentService;
-import com.goevently.paymentservice.util.JwtTokenUtil;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,8 +13,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.io.IOException;
 
 @RestController
 @RequestMapping("/api/payments")
@@ -31,10 +28,8 @@ public class PaymentController {
      *
      * Request:
      * {
-     *   "bookingId": 1,
-     *   "amount": 5000.00,
-     *   "currency": "INR",
-     *   "paymentMethod": "CREDIT_CARD"
+     *  "bookingId": 1,
+     *  "paymentMethod": "UPI"
      * }
      *
      * Response: PaymentResponse with Razorpay order ID
@@ -102,9 +97,20 @@ public class PaymentController {
     public ResponseEntity<ApiResponse<Page<PaymentResponse>>> getUserPayments(
             @PathVariable Long userId,
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size) {
+            @RequestParam(defaultValue = "10") int size,
+            @RequestHeader("X-User-Id") Long requesterId,
+            @RequestHeader(value = "X-User-Role", required = false, defaultValue = "USER") String role
+    ) {
 
-        log.info("Fetching payments for user: {}", userId);
+        log.info("Fetching payments for userId={} requestedBy={} role={}", userId, requesterId, role);
+
+        if (!"ADMIN".equalsIgnoreCase(role) && !requesterId.equals(userId)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                    .body(ApiResponse.<Page<PaymentResponse>>builder()
+                            .success(false)
+                            .message("You can only view your own payments")
+                            .build());
+        }
 
         Pageable pageable = PageRequest.of(page, size);
         Page<PaymentResponse> payments = paymentService.getUserPayments(userId, pageable);
@@ -173,8 +179,19 @@ public class PaymentController {
      * POST /api/payments/{id}/refund
      */
     @PostMapping("/{id}/refund")
-    public ResponseEntity<ApiResponse<PaymentResponse>> refundPayment(@PathVariable Long id) {
-        log.info("Refunding payment: {}", id);
+    public ResponseEntity<ApiResponse<PaymentResponse>> refundPayment(
+            @PathVariable Long id,
+            @RequestHeader("X-User-Role") String role
+    ) {
+        log.info("Refunding payment: {} by role: {}", id, role);
+
+        if (!"ADMIN".equalsIgnoreCase(role)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                    .body(ApiResponse.<PaymentResponse>builder()
+                            .success(false)
+                            .message("Only admin can refund payments")
+                            .build());
+        }
 
         PaymentResponse payment = paymentService.refundPayment(id);
 

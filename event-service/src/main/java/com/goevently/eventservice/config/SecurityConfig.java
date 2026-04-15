@@ -42,10 +42,12 @@ public class SecurityConfig {
                                 "/api/categories/**",
                                 "/api/ticket-tiers/**"
                         ).permitAll()
-                        .anyRequest().authenticated()
-                )
-                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
-
+                        .requestMatchers(HttpMethod.POST,
+                                "/api/ticket-tiers/*/reserve",
+                                "/api/ticket-tiers/*/release"
+                        ).permitAll()
+                        .anyRequest().permitAll()
+                );
         return http.build();
     }
 }

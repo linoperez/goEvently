@@ -43,6 +43,9 @@ public class Booking {
     @Column(name = "booking_time")
     private LocalDateTime bookingTime;
 
+    @Column(name = "lock_id")
+    private String lockId;
+
     @Column(name = "payment_id")
     private String paymentId;
 

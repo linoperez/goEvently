@@ -52,6 +52,10 @@ spring:
           uri: lb://booking-service
           predicates:
             - Path=/api/bookings/**
+        - id: lock-service
+          uri: lb://booking-service
+          predicates:
+            - Path=/api/locks/**
 
         # Payment Service
         - id: payment-service

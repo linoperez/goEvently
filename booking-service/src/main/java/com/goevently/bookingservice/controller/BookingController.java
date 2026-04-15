@@ -48,9 +48,34 @@ public class BookingController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ApiResponse<BookingResponse>> getBooking(@PathVariable Long id) {
-        log.info("Fetching booking with ID: {}", id);
+    public ResponseEntity<ApiResponse<BookingResponse>> getBooking(
+            @PathVariable Long id,
+            @RequestHeader("X-User-Id") Long requesterId,
+            @RequestHeader(value = "X-User-Role", required = false, defaultValue = "USER") String role
+    ) {
         BookingResponse booking = bookingService.getBooking(id);
+
+        if (!"ADMIN".equalsIgnoreCase(role) && !booking.getUserId().equals(requesterId)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                    .body(ApiResponse.<BookingResponse>builder()
+                            .success(false)
+                            .message("You can only view your own booking")
+                            .build());
+        }
+
+        return ResponseEntity.ok(ApiResponse.<BookingResponse>builder()
+                .success(true)
+                .message("Booking retrieved successfully")
+                .data(booking)
+                .build());
+    }
+
+    @GetMapping("/internal/{id}")
+    public ResponseEntity<ApiResponse<BookingResponse>> getBookingInternal(@PathVariable Long id) {
+        log.info("Internal fetch for booking with ID: {}", id);
+
+        BookingResponse booking = bookingService.getBooking(id);
+
         return ResponseEntity.ok(ApiResponse.<BookingResponse>builder()
                 .success(true)
                 .message("Booking retrieved successfully")
@@ -93,9 +118,18 @@ public class BookingController {
     public ResponseEntity<ApiResponse<Page<BookingResponse>>> getEventBookings(
             @PathVariable Long eventId,
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size
+            @RequestParam(defaultValue = "10") int size,
+            @RequestHeader("X-User-Role") String role
     ) {
-        log.info("Fetching bookings for event: {}", eventId);
+
+        if (!"ADMIN".equalsIgnoreCase(role)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                    .body(ApiResponse.<Page<BookingResponse>>builder()
+                            .success(false)
+                            .message("Only admin can view event bookings")
+                            .build());
+        }
+
         Pageable pageable = PageRequest.of(page, size);
         Page<BookingResponse> bookings = bookingService.getEventBookings(eventId, pageable);
 
@@ -109,9 +143,19 @@ public class BookingController {
     @PostMapping("/{id}/confirm")
     public ResponseEntity<ApiResponse<BookingResponse>> confirmBooking(
             @PathVariable Long id,
-            @RequestParam String paymentId
+            @RequestParam String paymentId,
+            @RequestHeader("X-User-Role") String role
     ) {
-        log.info("Confirming booking: {} with payment ID: {}", id, paymentId);
+        log.info("Confirming booking: {} with payment ID: {} by role: {}", id, paymentId, role);
+
+        if (!"ADMIN".equalsIgnoreCase(role)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                    .body(ApiResponse.<BookingResponse>builder()
+                            .success(false)
+                            .message("Only admin can confirm bookings")
+                            .build());
+        }
+
         BookingResponse booking = bookingService.confirmBooking(id, paymentId);
 
         return ResponseEntity.ok(ApiResponse.<BookingResponse>builder()
@@ -122,8 +166,20 @@ public class BookingController {
     }
 
     @PostMapping("/{id}/cancel")
-    public ResponseEntity<ApiResponse<BookingResponse>> cancelBooking(@PathVariable Long id) {
-        log.info("Cancelling booking: {}", id);
+    public ResponseEntity<ApiResponse<BookingResponse>> cancelBooking(
+            @PathVariable Long id,
+            @RequestHeader("X-User-Role") String role
+    ) {
+        log.info("Cancelling booking: {} by role: {}", id, role);
+
+        if (!"ADMIN".equalsIgnoreCase(role)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                    .body(ApiResponse.<BookingResponse>builder()
+                            .success(false)
+                            .message("Only admin can cancel bookings")
+                            .build());
+        }
+
         BookingResponse booking = bookingService.cancelBooking(id);
 
         return ResponseEntity.ok(ApiResponse.<BookingResponse>builder()
@@ -134,8 +190,20 @@ public class BookingController {
     }
 
     @PostMapping("/{id}/fail")
-    public ResponseEntity<ApiResponse<BookingResponse>> failBooking(@PathVariable Long id) {
-        log.info("Marking booking as failed: {}", id);
+    public ResponseEntity<ApiResponse<BookingResponse>> failBooking(
+            @PathVariable Long id,
+            @RequestHeader("X-User-Role") String role
+    ) {
+        log.info("Marking booking as failed: {} by role: {}", id, role);
+
+        if (!"ADMIN".equalsIgnoreCase(role)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                    .body(ApiResponse.<BookingResponse>builder()
+                            .success(false)
+                            .message("Only admin can mark booking as failed")
+                            .build());
+        }
+
         BookingResponse booking = bookingService.failBooking(id);
 
         return ResponseEntity.ok(ApiResponse.<BookingResponse>builder()
@@ -144,4 +212,5 @@ public class BookingController {
                 .data(booking)
                 .build());
     }
+
 }

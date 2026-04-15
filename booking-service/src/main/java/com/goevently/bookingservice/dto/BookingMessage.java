@@ -25,6 +25,7 @@ public class BookingMessage {
     // Phase 1 fields
     private Long ticketTierId;
     private Integer quantity;
+    private String lockId;
 
     private String status;
 

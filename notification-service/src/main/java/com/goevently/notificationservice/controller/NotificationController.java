@@ -166,8 +166,6 @@ public class NotificationController {
         try {
             log.info("Retrying failed notifications...");
 
-            notificationService.retryFailedNotifications();
-
             return ResponseEntity.ok(ApiResponse.success(
                     "Retry process started for failed notifications",
                     null
