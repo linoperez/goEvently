@@ -15,13 +15,15 @@ public interface EventServiceClient {
     ApiResponse<Void> reserveQuantity(
             @PathVariable("id") Long tierId,
             @RequestParam("quantity") int quantity,
-            @RequestHeader("X-Internal-Call") String internalCall
+            @RequestHeader("X-Internal-Call") String internalCall,
+            @RequestHeader("X-Internal-Secret") String internalSecret
     );
 
     @PostMapping("/api/ticket-tiers/{id}/release")
     ApiResponse<Void> releaseQuantity(
             @PathVariable("id") Long tierId,
             @RequestParam("quantity") int quantity,
-            @RequestHeader("X-Internal-Call") String internalCall
+            @RequestHeader("X-Internal-Call") String internalCall,
+            @RequestHeader("X-Internal-Secret") String internalSecret
     );
 }

@@ -1,7 +1,5 @@
-package com.goevently.bookingservice.config;
+package com.goevently.notificationservice.config;
 
-import com.goevently.bookingservice.dto.BookingMessage;
-import org.apache.kafka.clients.admin.NewTopic;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.StringSerializer;
 import org.springframework.beans.factory.annotation.Value;
@@ -21,22 +19,7 @@ public class KafkaProducerConfig {
     @Value("${spring.kafka.bootstrap-servers}")
     private String bootstrapServers;
 
-    @Bean
-    public ProducerFactory<String, BookingMessage> producerFactory() {
-        Map<String, Object> configProps = new HashMap<>();
-        configProps.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
-        configProps.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
-        configProps.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, JsonSerializer.class);
-
-        return new DefaultKafkaProducerFactory<>(configProps);
-    }
-
-    @Bean
-    public KafkaTemplate<String, BookingMessage> kafkaTemplate() {
-        return new KafkaTemplate<>(producerFactory());
-    }
-
-    // DLT producer template for retry + dead-letter publishing
+    // 🔥 Only needed for DLT (retry + dead letter)
     @Bean
     public ProducerFactory<String, Object> dltProducerFactory() {
         Map<String, Object> props = new HashMap<>();
@@ -50,21 +33,5 @@ public class KafkaProducerConfig {
     @Bean
     public KafkaTemplate<String, Object> dltKafkaTemplate() {
         return new KafkaTemplate<>(dltProducerFactory());
-    }
-
-    // Existing booking topics
-    @Bean
-    public NewTopic bookingCreatedTopic() {
-        return new NewTopic("booking-created", 1, (short) 1);
-    }
-
-    @Bean
-    public NewTopic bookingConfirmedTopic() {
-        return new NewTopic("booking-confirmed", 1, (short) 1);
-    }
-
-    @Bean
-    public NewTopic bookingCancelledTopic() {
-        return new NewTopic("booking-cancelled", 1, (short) 1);
     }
 }

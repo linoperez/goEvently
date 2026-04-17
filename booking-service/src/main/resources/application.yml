@@ -61,3 +61,8 @@ logging:
   level:
     root: INFO
     com.goevently: DEBUG
+
+
+internal:
+  api:
+    secret: goEvently@2823

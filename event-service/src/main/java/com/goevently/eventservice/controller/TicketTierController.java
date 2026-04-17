@@ -2,6 +2,7 @@ package com.goevently.eventservice.controller;
 
 import com.goevently.eventservice.dto.*;
 import com.goevently.eventservice.service.TicketTierService;
+import com.goevently.eventservice.service.InternalApiSecurityService;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +20,9 @@ import java.util.List;
 public class TicketTierController {
 
     private final TicketTierService ticketTierService;
+
+    @Autowired
+    private InternalApiSecurityService internalApiSecurityService;
 
     @Autowired
     public TicketTierController(TicketTierService ticketTierService) {
@@ -87,9 +91,10 @@ public class TicketTierController {
     public ResponseEntity<ApiResponse<Void>> reserveQuantity(
             @PathVariable Long id,
             @RequestParam int quantity,
-            @RequestHeader(value = "X-Internal-Call", required = false) String internalCall
+            @RequestHeader(value = "X-Internal-Call", required = false) String internalCall,
+            @RequestHeader(value = "X-Internal-Secret", required = false) String internalSecret
     ) {
-        if (!"true".equalsIgnoreCase(internalCall)) {
+        if (!internalApiSecurityService.isValidInternalCall(internalCall, internalSecret)) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN)
                     .body(ApiResponse.<Void>builder()
                             .success(false)
@@ -109,9 +114,10 @@ public class TicketTierController {
     public ResponseEntity<ApiResponse<Void>> releaseQuantity(
             @PathVariable Long id,
             @RequestParam int quantity,
-            @RequestHeader(value = "X-Internal-Call", required = false) String internalCall
+            @RequestHeader(value = "X-Internal-Call", required = false) String internalCall,
+            @RequestHeader(value = "X-Internal-Secret", required = false) String internalSecret
     ) {
-        if (!"true".equalsIgnoreCase(internalCall)) {
+        if (!internalApiSecurityService.isValidInternalCall(internalCall, internalSecret)) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN)
                     .body(ApiResponse.<Void>builder()
                             .success(false)

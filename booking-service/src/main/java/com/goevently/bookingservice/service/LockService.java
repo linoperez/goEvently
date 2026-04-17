@@ -12,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.beans.factory.annotation.Value;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -35,6 +36,9 @@ public class LockService {
     @Value("${app.lock.ttl-minutes:5}")
     private long lockTtlMinutes;
 
+    @Value("${internal.api.secret}")
+    private String internalApiSecret;
+
     public LockResponse createLock(Long userId, LockRequest request) {
 
         // Reserve seats in event-service BEFORE creating lock
@@ -42,7 +46,8 @@ public class LockService {
             eventServiceClient.reserveQuantity(
                     request.getTicketTierId(),
                     request.getQuantity(),
-                    "true"
+                    "true",
+                    internalApiSecret
             );
         } catch (Exception e) {
             log.error("Failed to reserve seats for tierId={} quantity={}",
@@ -108,7 +113,8 @@ public class LockService {
                 eventServiceClient.releaseQuantity(
                         lock.getTicketTierId(),
                         lock.getQuantity(),
-                        "true"
+                        "true",
+                        internalApiSecret
                 );
             } catch (Exception e) {
                 log.error("Failed to release seats in event-service", e);
@@ -120,7 +126,8 @@ public class LockService {
                     eventServiceClient.releaseQuantity(
                             record.getTicketTierId(),
                             record.getQuantity(),
-                            "true"
+                            "true",
+                            internalApiSecret
                     );
                 } catch (Exception e) {
                     log.error("Failed to release seats from lock record fallback lockId={}", lockId, e);
