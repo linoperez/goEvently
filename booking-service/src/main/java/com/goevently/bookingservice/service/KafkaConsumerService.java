@@ -19,8 +19,8 @@ public class KafkaConsumerService {
             containerFactory = "paymentKafkaListenerContainerFactory"
     )
     public void handlePaymentSuccess(PaymentEvent event) {
-        log.info("Received payment-success event: bookingId={}, paymentId={}",
-                event.getBookingId(), event.getPaymentId());
+        log.info("Received payment-success event: bookingId={}, paymentId={}, status={}",
+                event.getBookingId(), event.getPaymentId(), event.getStatus());
 
         if (event.getBookingId() == null) {
             log.warn("Ignoring payment-success because bookingId is null");
@@ -36,8 +36,9 @@ public class KafkaConsumerService {
             containerFactory = "paymentKafkaListenerContainerFactory"
     )
     public void handlePaymentFailed(PaymentEvent event) {
-        log.info("Received payment-failed event: bookingId={}, paymentId={}",
-                event.getBookingId(), event.getPaymentId());
+        log.info("Received payment-failed event: bookingId={}, status={}, reason={}",
+                event.getBookingId(), event.getStatus(),
+                event.getFailureReason() != null ? event.getFailureReason() : event.getReason());
 
         if (event.getBookingId() == null) {
             log.warn("Ignoring payment-failed because bookingId is null");

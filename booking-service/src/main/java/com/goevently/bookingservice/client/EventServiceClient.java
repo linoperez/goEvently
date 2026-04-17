@@ -14,12 +14,14 @@ public interface EventServiceClient {
     @PostMapping("/api/ticket-tiers/{id}/reserve")
     ApiResponse<Void> reserveQuantity(
             @PathVariable("id") Long tierId,
-            @RequestParam("quantity") int quantity
+            @RequestParam("quantity") int quantity,
+            @RequestHeader("X-Internal-Call") String internalCall
     );
 
     @PostMapping("/api/ticket-tiers/{id}/release")
     ApiResponse<Void> releaseQuantity(
             @PathVariable("id") Long tierId,
-            @RequestParam("quantity") int quantity
+            @RequestParam("quantity") int quantity,
+            @RequestHeader("X-Internal-Call") String internalCall
     );
 }

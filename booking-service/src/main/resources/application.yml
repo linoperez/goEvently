@@ -43,6 +43,9 @@ app:
   lock:
     ttl-minutes: 7
     cleanup-interval-ms: 10000
+  booking:
+    payment-timeout-minutes: 1
+    cleanup-interval-ms: 10000
   jwtSecret: ${JWT_SECRET:myGoEventlySecretKeyThatIsLongEnoughForHS256Algorithm}
   jwtExpirationMs: ${JWT_EXPIRATION_MS:86400000}
 

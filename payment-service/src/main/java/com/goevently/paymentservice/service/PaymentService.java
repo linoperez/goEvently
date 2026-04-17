@@ -113,7 +113,6 @@ public class PaymentService {
     public PaymentResponse verifyAndProcessPayment(String orderId, String paymentId, String signature) {
         log.info("Verifying payment for order: {}, payment: {}", orderId, paymentId);
 
-        // Verify signature
         if (!razorpayClient.verifyPaymentSignature(orderId, paymentId, signature)) {
             log.error("Payment signature verification failed!");
             throw new RuntimeException("Invalid payment signature");
@@ -123,6 +122,12 @@ public class PaymentService {
         Payment payment = paymentRepository.findByGatewayTxnId(orderId)
                 .orElseThrow(() -> new RuntimeException("Payment not found for order: " + orderId));
 
+        // ADD THIS BLOCK HERE
+        if (payment.getStatus() == PaymentStatus.SUCCESS) {
+            log.warn("Payment already processed for orderId={}", orderId);
+            return mapToResponse(payment, orderId);
+        }
+
         // Mark as success
         payment.setStatus(PaymentStatus.SUCCESS);
         payment.setPaymentTime(LocalDateTime.now());
@@ -130,7 +135,6 @@ public class PaymentService {
 
         log.info("Payment verified and marked as SUCCESS. Payment ID: {}", payment.getId());
 
-        // Emit Kafka event
         PaymentMessage message = PaymentMessage.builder()
                 .id(payment.getId())
                 .bookingId(payment.getBookingId())
@@ -140,6 +144,7 @@ public class PaymentService {
                 .currency(payment.getCurrency())
                 .status(payment.getStatus().toString())
                 .gatewayTxnId(payment.getGatewayTxnId())
+                .paymentId(paymentId)
                 .paymentTime(payment.getPaymentTime())
                 .build();
 
@@ -157,6 +162,12 @@ public class PaymentService {
         Payment payment = paymentRepository.findByGatewayTxnId(orderId)
                 .orElseThrow(() -> new RuntimeException("Payment not found for order: " + orderId));
 
+
+        if (payment.getStatus() == PaymentStatus.FAILED) {
+            log.warn("Payment already marked failed for orderId={}", orderId);
+            return mapToResponse(payment, orderId);
+        }
+
         payment.setStatus(PaymentStatus.FAILED);
         payment.setPaymentTime(LocalDateTime.now());
         payment = paymentRepository.save(payment);
@@ -170,6 +181,8 @@ public class PaymentService {
                 .amount(payment.getAmount())
                 .currency(payment.getCurrency())
                 .status(payment.getStatus().toString())
+                .gatewayTxnId(payment.getGatewayTxnId())
+                .paymentId(null)
                 .failureReason(reason)
                 .build();
 

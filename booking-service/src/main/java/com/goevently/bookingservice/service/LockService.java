@@ -41,7 +41,8 @@ public class LockService {
         try {
             eventServiceClient.reserveQuantity(
                     request.getTicketTierId(),
-                    request.getQuantity()
+                    request.getQuantity(),
+                    "true"
             );
         } catch (Exception e) {
             log.error("Failed to reserve seats for tierId={} quantity={}",
@@ -106,7 +107,8 @@ public class LockService {
             try {
                 eventServiceClient.releaseQuantity(
                         lock.getTicketTierId(),
-                        lock.getQuantity()
+                        lock.getQuantity(),
+                        "true"
                 );
             } catch (Exception e) {
                 log.error("Failed to release seats in event-service", e);
@@ -117,7 +119,8 @@ public class LockService {
                 try {
                     eventServiceClient.releaseQuantity(
                             record.getTicketTierId(),
-                            record.getQuantity()
+                            record.getQuantity(),
+                            "true"
                     );
                 } catch (Exception e) {
                     log.error("Failed to release seats from lock record fallback lockId={}", lockId, e);

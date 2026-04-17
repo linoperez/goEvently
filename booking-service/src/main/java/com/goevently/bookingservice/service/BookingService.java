@@ -151,12 +151,10 @@ public class BookingService {
         Booking booking = bookingRepository.findById(bookingId)
                 .orElseThrow(() -> new RuntimeException("Booking not found with ID: " + bookingId));
 
-        if (BookingStatus.CONFIRMED.toString().equals(booking.getStatus())) {
+        if (!BookingStatus.PENDING_PAYMENT.toString().equals(booking.getStatus())) {
+            log.warn("Ignoring confirmBooking for bookingId={} because status={}",
+                    bookingId, booking.getStatus());
             return mapToResponse(booking);
-        }
-
-        if (BookingStatus.FAILED.toString().equals(booking.getStatus())) {
-            throw new RuntimeException("Cannot confirm a failed booking");
         }
 
         booking.setStatus(BookingStatus.CONFIRMED.toString());
@@ -164,7 +162,6 @@ public class BookingService {
 
         Booking updatedBooking = bookingRepository.save(booking);
 
-        // Lock no longer needed after successful payment.
         if (updatedBooking.getLockId() != null && !updatedBooking.getLockId().isBlank()) {
             lockService.deleteLockOnly(updatedBooking.getLockId());
         }
@@ -216,15 +213,40 @@ public class BookingService {
         Booking booking = bookingRepository.findById(bookingId)
                 .orElseThrow(() -> new RuntimeException("Booking not found with ID: " + bookingId));
 
-        if (BookingStatus.FAILED.toString().equals(booking.getStatus())) {
+        if (!BookingStatus.PENDING_PAYMENT.toString().equals(booking.getStatus())) {
+            log.warn("Ignoring failBooking for bookingId={} because status={}",
+                    bookingId, booking.getStatus());
+            return mapToResponse(booking);
+        }
+
+        booking.setStatus(BookingStatus.FAILED.toString());
+        Booking updatedBooking = bookingRepository.save(booking);
+
+        if (updatedBooking.getLockId() != null && !updatedBooking.getLockId().isBlank()) {
+            lockService.releaseLock(updatedBooking.getLockId());
+        }
+
+        return mapToResponse(updatedBooking);
+    }
+
+    public BookingResponse expireBooking(Long bookingId) {
+        Booking booking = bookingRepository.findById(bookingId)
+                .orElseThrow(() -> new RuntimeException("Booking not found with ID: " + bookingId));
+
+        if (BookingStatus.EXPIRED.toString().equals(booking.getStatus())) {
             return mapToResponse(booking);
         }
 
         if (BookingStatus.CONFIRMED.toString().equals(booking.getStatus())) {
-            throw new RuntimeException("Cannot fail a confirmed booking");
+            throw new RuntimeException("Cannot expire a confirmed booking");
         }
 
-        booking.setStatus(BookingStatus.FAILED.toString());
+        if (BookingStatus.FAILED.toString().equals(booking.getStatus())
+                || BookingStatus.CANCELLED.toString().equals(booking.getStatus())) {
+            return mapToResponse(booking);
+        }
+
+        booking.setStatus(BookingStatus.EXPIRED.toString());
         Booking updatedBooking = bookingRepository.save(booking);
 
         if (updatedBooking.getLockId() != null && !updatedBooking.getLockId().isBlank()) {

@@ -23,6 +23,7 @@ public class PaymentMessage {
     private String status;
     private String paymentMethod;
     private String gatewayTxnId;
+    private String paymentId;
     private LocalDateTime paymentTime;
     private String failureReason;  // For failed payments
 }

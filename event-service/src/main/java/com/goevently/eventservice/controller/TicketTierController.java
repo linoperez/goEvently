@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestHeader;
 
 import java.util.List;
 
@@ -85,8 +86,17 @@ public class TicketTierController {
     @PostMapping("/{id}/reserve")
     public ResponseEntity<ApiResponse<Void>> reserveQuantity(
             @PathVariable Long id,
-            @RequestParam int quantity
+            @RequestParam int quantity,
+            @RequestHeader(value = "X-Internal-Call", required = false) String internalCall
     ) {
+        if (!"true".equalsIgnoreCase(internalCall)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                    .body(ApiResponse.<Void>builder()
+                            .success(false)
+                            .message("Forbidden: internal API access only")
+                            .build());
+        }
+
         ticketTierService.reserveQuantity(id, quantity);
 
         return ResponseEntity.ok(ApiResponse.<Void>builder()
@@ -98,8 +108,17 @@ public class TicketTierController {
     @PostMapping("/{id}/release")
     public ResponseEntity<ApiResponse<Void>> releaseQuantity(
             @PathVariable Long id,
-            @RequestParam int quantity
+            @RequestParam int quantity,
+            @RequestHeader(value = "X-Internal-Call", required = false) String internalCall
     ) {
+        if (!"true".equalsIgnoreCase(internalCall)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                    .body(ApiResponse.<Void>builder()
+                            .success(false)
+                            .message("Forbidden: internal API access only")
+                            .build());
+        }
+
         ticketTierService.releaseQuantity(id, quantity);
 
         return ResponseEntity.ok(ApiResponse.<Void>builder()
