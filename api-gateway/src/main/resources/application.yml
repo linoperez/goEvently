@@ -94,6 +94,8 @@ logging:
   level:
     com.goevently.apigateway: INFO
     org.springframework.cloud.gateway: DEBUG
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level [%X{correlationId:-N/A}] %logger{36} - %msg%n"
 
 jackson:
   serialization:

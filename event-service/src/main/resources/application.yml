@@ -58,6 +58,8 @@ logging:
   level:
     com.goevently.eventservice: INFO
     org.springframework.security: WARN
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level [%X{correlationId:-N/A}] %logger{36} - %msg%n"
 
 cache:
   type: redis

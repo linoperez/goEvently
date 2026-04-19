@@ -52,3 +52,5 @@ logging:
   level:
     root: INFO
     com.goevently: DEBUG
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level [%X{correlationId:-N/A}] %logger{36} - %msg%n"

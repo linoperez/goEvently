@@ -46,3 +46,5 @@ logging:
   level:
     com.goevently.authservice: INFO
     org.springframework.security: WARN
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level [%X{correlationId:-N/A}] %logger{36} - %msg%n"
