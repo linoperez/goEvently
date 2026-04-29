@@ -5,26 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="7c55ebb2-c1d5-48b0-b1df-ef955f13f4e0" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/api-gateway/src/main/java/com/goevently/apigateway/filter/CorrelationIdFilter.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/auth-service/src/main/java/com/goevently/authservice/filter/CorrelationIdFilter.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/booking-service/src/main/java/com/goevently/bookingservice/config/FeignCorrelationConfig.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/booking-service/src/main/java/com/goevently/bookingservice/filter/CorrelationIdFilter.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/event-service/src/main/java/com/goevently/eventservice/filter/CorrelationIdFilter.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/notification-service/src/main/java/com/goevently/notificationservice/filter/CorrelationIdFilter.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/payment-service/src/main/java/com/goevently/paymentservice/config/FeignCorrelationConfig.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/payment-service/src/main/java/com/goevently/paymentservice/filter/CorrelationIdFilter.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api-gateway/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/api-gateway/src/main/resources/application.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/auth-service/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/auth-service/src/main/resources/application.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/booking-service/src/main/java/com/goevently/bookingservice/service/KafkaConsumerService.java" beforeDir="false" afterPath="$PROJECT_DIR$/booking-service/src/main/java/com/goevently/bookingservice/service/KafkaConsumerService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/booking-service/src/main/java/com/goevently/bookingservice/service/KafkaProducerService.java" beforeDir="false" afterPath="$PROJECT_DIR$/booking-service/src/main/java/com/goevently/bookingservice/service/KafkaProducerService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/booking-service/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/booking-service/src/main/resources/application.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/event-service/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/event-service/src/main/resources/application.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/notification-service/src/main/java/com/goevently/notificationservice/service/KafkaConsumerService.java" beforeDir="false" afterPath="$PROJECT_DIR$/notification-service/src/main/java/com/goevently/notificationservice/service/KafkaConsumerService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/notification-service/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/notification-service/src/main/resources/application.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/payment-service/src/main/java/com/goevently/paymentservice/service/KafkaProducerService.java" beforeDir="false" afterPath="$PROJECT_DIR$/payment-service/src/main/java/com/goevently/paymentservice/service/KafkaProducerService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/payment-service/src/main/resources/application.properties" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/payment-service/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/payment-service/src/main/resources/application.yml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -153,7 +134,7 @@
       </set>
     </option>
   </component>
-  <component name="RunManager" selected="Spring Boot.EventService - Local">
+  <component name="RunManager" selected="Spring Boot.BookingService - Local">
     <configuration name="ApiGateway - Local" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" temporary="true">
       <option name="ACTIVE_PROFILES" value="local" />
       <module name="api-gateway" />
@@ -239,8 +220,8 @@
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Spring Boot.EventService - Local" />
         <item itemvalue="Spring Boot.ApiGateway - Local" />
+        <item itemvalue="Spring Boot.EventService - Local" />
         <item itemvalue="Spring Boot.EurekaServer - Local" />
       </list>
     </recent_temporary>
@@ -371,7 +352,8 @@
       <workItem from="1776354143662" duration="3650000" />
       <workItem from="1776441380614" duration="15433000" />
       <workItem from="1776499529210" duration="5390000" />
-      <workItem from="1776589313487" duration="1990000" />
+      <workItem from="1776589313487" duration="5402000" />
+      <workItem from="1777479579649" duration="1781000" />
     </task>
     <task id="LOCAL-00001" summary="I think everything until week 6">
       <option name="closed" value="true" />
@@ -469,7 +451,15 @@
       <option name="project" value="LOCAL" />
       <updated>1776458497521</updated>
     </task>
-    <option name="localTasksCounter" value="13" />
+    <task id="LOCAL-00013" summary="Completed all services with core architectural planning.">
+      <option name="closed" value="true" />
+      <created>1776598128284</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1776598128284</updated>
+    </task>
+    <option name="localTasksCounter" value="14" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -493,7 +483,8 @@
     <MESSAGE value="14th Apr" />
     <MESSAGE value="Implemented the Seat-Locking, Payment_booking auto confirm and failure, Idempotency, Internal API_calls" />
     <MESSAGE value="Implemented retry --&gt; DLT publishing" />
-    <option name="LAST_COMMIT_MESSAGE" value="Implemented retry --&gt; DLT publishing" />
+    <MESSAGE value="Completed all services with core architectural planning." />
+    <option name="LAST_COMMIT_MESSAGE" value="Completed all services with core architectural planning." />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />
