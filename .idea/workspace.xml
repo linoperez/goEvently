@@ -5,7 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="7c55ebb2-c1d5-48b0-b1df-ef955f13f4e0" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/event-service/src/main/java/com/goevently/eventservice/filter/GatewayAuthenticationFilter.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/event-service/src/main/java/com/goevently/eventservice/config/SecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/event-service/src/main/java/com/goevently/eventservice/config/SecurityConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/event-service/src/main/java/com/goevently/eventservice/filter/JwtAuthFilter.java" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -353,7 +356,10 @@
       <workItem from="1776441380614" duration="15433000" />
       <workItem from="1776499529210" duration="5390000" />
       <workItem from="1776589313487" duration="5402000" />
-      <workItem from="1777479579649" duration="1781000" />
+      <workItem from="1777479579649" duration="2410000" />
+      <workItem from="1777710730301" duration="8039000" />
+      <workItem from="1778253299921" duration="3925000" />
+      <workItem from="1778321710727" duration="1037000" />
     </task>
     <task id="LOCAL-00001" summary="I think everything until week 6">
       <option name="closed" value="true" />
@@ -459,7 +465,15 @@
       <option name="project" value="LOCAL" />
       <updated>1776598128284</updated>
     </task>
-    <option name="localTasksCounter" value="14" />
+    <task id="LOCAL-00014" summary="Completed all services with core architectural planning.">
+      <option name="closed" value="true" />
+      <created>1777481375027</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1777481375027</updated>
+    </task>
+    <option name="localTasksCounter" value="15" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
