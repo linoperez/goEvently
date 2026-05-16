@@ -14,6 +14,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.data.domain.Page;
 
 import java.util.List;
 
@@ -82,12 +83,35 @@ public class EventController {
      * Endpoint for retrieving all events.
      */
     @GetMapping
-    public ResponseEntity<ApiResponse<List<EventResponse>>> getAllEvents() {
-        log.info("Received request to get all events");
+    public ResponseEntity<ApiResponse<Page<EventResponse>>> getEvents(
+            @RequestParam(required = false) String keyword,
+            @RequestParam(required = false) String city,
+            @RequestParam(required = false) Long categoryId,
+            @RequestParam(required = false) Long venueId,
+            @RequestParam(required = false) LocalDateTime startDate,
+            @RequestParam(required = false) LocalDateTime endDate,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "12") int size,
+            @RequestParam(defaultValue = "startTime,asc") String sort
+    ) {
+        log.info(
+                "Received request to get events: keyword={}, city={}, categoryId={}, venueId={}, startDate={}, endDate={}, page={}, size={}, sort={}",
+                keyword, city, categoryId, venueId, startDate, endDate, page, size, sort
+        );
 
-        List<EventResponse> events = eventService.getAllEvents();
+        Page<EventResponse> events = eventService.getEvents(
+                keyword,
+                city,
+                categoryId,
+                venueId,
+                startDate,
+                endDate,
+                page,
+                size,
+                sort
+        );
 
-        ApiResponse<List<EventResponse>> response = ApiResponse.<List<EventResponse>>builder()
+        ApiResponse<Page<EventResponse>> response = ApiResponse.<Page<EventResponse>>builder()
                 .success(true)
                 .message("Events retrieved successfully")
                 .data(events)

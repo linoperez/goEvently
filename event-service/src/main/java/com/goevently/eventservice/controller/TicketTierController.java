@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.RequestHeader;
 
@@ -33,8 +35,17 @@ public class TicketTierController {
     @PreAuthorize("hasAnyRole('ADMIN', 'ORGANIZER')")
     public ResponseEntity<ApiResponse<TicketTierResponse>> createTicketTier(
             @Valid @RequestBody CreateTicketTierRequest request) {
-        log.info("API Call: Create ticket tier for event ID {}", request.getEventId());
-        TicketTierResponse response = ticketTierService.createTier(request);
+
+        String username = getCurrentUsername();
+
+        log.info(
+                "API Call: Create ticket tier for event ID {} by user {}",
+                request.getEventId(),
+                username
+        );
+
+        TicketTierResponse response = ticketTierService.createTier(request, username);
+
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(ApiResponse.success("Ticket tier created successfully", response));
     }
@@ -61,16 +72,26 @@ public class TicketTierController {
     public ResponseEntity<ApiResponse<TicketTierResponse>> updateTier(
             @PathVariable Long id,
             @Valid @RequestBody UpdateTicketTierRequest request) {
-        log.info("API Call: Update ticket tier ID {}", id);
-        TicketTierResponse updated = ticketTierService.updateTier(id, request);
+
+        String username = getCurrentUsername();
+
+        log.info("API Call: Update ticket tier ID {} by user {}", id, username);
+
+        TicketTierResponse updated = ticketTierService.updateTier(id, request, username);
+
         return ResponseEntity.ok(ApiResponse.success("Ticket tier updated successfully", updated));
     }
 
     @DeleteMapping("/{id}")
     @PreAuthorize("hasAnyRole('ADMIN', 'ORGANIZER')")
     public ResponseEntity<ApiResponse<Void>> deleteTier(@PathVariable Long id) {
-        log.info("API Call: Delete ticket tier ID {}", id);
-        ticketTierService.deleteTier(id);
+
+        String username = getCurrentUsername();
+
+        log.info("API Call: Delete ticket tier ID {} by user {}", id, username);
+
+        ticketTierService.deleteTier(id, username);
+
         return ResponseEntity.ok(ApiResponse.success("Ticket tier deleted successfully"));
     }
 
@@ -131,6 +152,11 @@ public class TicketTierController {
                 .success(true)
                 .message("Quantity released successfully")
                 .build());
+    }
+
+    private String getCurrentUsername() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        return authentication.getName();
     }
 
 

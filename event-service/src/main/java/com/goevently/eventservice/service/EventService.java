@@ -27,6 +27,11 @@ import java.time.LocalDate;
 import com.goevently.eventservice.dto.EventSearchRequest;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 
 
 /**
@@ -156,6 +161,116 @@ public class EventService {
         return eventRepository.findByOrganizerUsername(organizerUsername).stream()
                 .map(eventMapper::toResponse)
                 .collect(Collectors.toList());
+    }
+
+    @Transactional(readOnly = true)
+    public Page<EventResponse> getEvents(
+            String keyword,
+            String city,
+            Long categoryId,
+            Long venueId,
+            LocalDateTime startDate,
+            LocalDateTime endDate,
+            int page,
+            int size,
+            String sort
+    ) {
+        log.info(
+                "Fetching events with filters: keyword={}, city={}, categoryId={}, venueId={}, startDate={}, endDate={}, page={}, size={}, sort={}",
+                keyword, city, categoryId, venueId, startDate, endDate, page, size, sort
+        );
+
+        Pageable pageable = buildPageable(page, size, sort);
+
+        List<Event> filteredEvents = eventRepository.findAll();
+
+        if (keyword != null && !keyword.trim().isEmpty()) {
+            String lowerKeyword = keyword.trim().toLowerCase();
+
+            filteredEvents = filteredEvents.stream()
+                    .filter(event ->
+                            containsIgnoreCase(event.getName(), lowerKeyword) ||
+                                    containsIgnoreCase(event.getDescription(), lowerKeyword) ||
+                                    containsIgnoreCase(event.getOrganizerUsername(), lowerKeyword) ||
+                                    (
+                                            event.getVenue() != null &&
+                                                    (
+                                                            containsIgnoreCase(event.getVenue().getName(), lowerKeyword) ||
+                                                                    containsIgnoreCase(event.getVenue().getCity(), lowerKeyword) ||
+                                                                    containsIgnoreCase(event.getVenue().getState(), lowerKeyword)
+                                                    )
+                                    ) ||
+                                    (
+                                            event.getCategory() != null &&
+                                                    containsIgnoreCase(event.getCategory().getName(), lowerKeyword)
+                                    )
+                    )
+                    .collect(Collectors.toList());
+        }
+
+        if (city != null && !city.trim().isEmpty()) {
+            String lowerCity = city.trim().toLowerCase();
+
+            filteredEvents = filteredEvents.stream()
+                    .filter(event ->
+                            event.getVenue() != null &&
+                                    event.getVenue().getCity() != null &&
+                                    event.getVenue().getCity().toLowerCase().contains(lowerCity)
+                    )
+                    .collect(Collectors.toList());
+        }
+
+        if (categoryId != null) {
+            filteredEvents = filteredEvents.stream()
+                    .filter(event ->
+                            event.getCategory() != null &&
+                                    event.getCategory().getId().equals(categoryId)
+                    )
+                    .collect(Collectors.toList());
+        }
+
+        if (venueId != null) {
+            filteredEvents = filteredEvents.stream()
+                    .filter(event ->
+                            event.getVenue() != null &&
+                                    event.getVenue().getId().equals(venueId)
+                    )
+                    .collect(Collectors.toList());
+        }
+
+        if (startDate != null) {
+            filteredEvents = filteredEvents.stream()
+                    .filter(event ->
+                            event.getStartTime() != null &&
+                                    !event.getStartTime().isBefore(startDate)
+                    )
+                    .collect(Collectors.toList());
+        }
+
+        if (endDate != null) {
+            filteredEvents = filteredEvents.stream()
+                    .filter(event ->
+                            event.getStartTime() != null &&
+                                    !event.getStartTime().isAfter(endDate)
+                    )
+                    .collect(Collectors.toList());
+        }
+
+        filteredEvents = applyInMemorySort(filteredEvents, pageable.getSort());
+
+        int total = filteredEvents.size();
+
+        int start = (int) pageable.getOffset();
+        int end = Math.min(start + pageable.getPageSize(), total);
+
+        List<EventResponse> pageContent = start >= total
+                ? List.of()
+                : filteredEvents.subList(start, end)
+                .stream()
+                .map(eventMapper::toResponse)
+                .collect(Collectors.toList());
+
+        return new PageImpl<>(pageContent, pageable, total);
     }
 
     /**
@@ -434,6 +549,107 @@ public class EventService {
      * @param endTime the event end time
      * @throws EventException if validation fails
      */
+
+    private Pageable buildPageable(int page, int size, String sort) {
+        int safePage = Math.max(page, 0);
+        int safeSize = Math.min(Math.max(size, 1), 100);
+
+        Sort parsedSort = parseSort(sort);
+
+        return PageRequest.of(safePage, safeSize, parsedSort);
+    }
+
+    private Sort parseSort(String sort) {
+        if (sort == null || sort.trim().isEmpty()) {
+            return Sort.by(Sort.Direction.ASC, "startTime");
+        }
+
+        String[] parts = sort.split(",");
+        String field = parts[0].trim();
+
+        if (!isAllowedSortField(field)) {
+            field = "startTime";
+        }
+
+        Sort.Direction direction = Sort.Direction.ASC;
+
+        if (parts.length > 1 && "desc".equalsIgnoreCase(parts[1].trim())) {
+            direction = Sort.Direction.DESC;
+        }
+
+        return Sort.by(direction, field);
+    }
+
+    private boolean isAllowedSortField(String field) {
+        return "startTime".equals(field)
+                || "endTime".equals(field)
+                || "name".equals(field)
+                || "maxAttendees".equals(field)
+                || "createdAt".equals(field);
+    }
+
+    private boolean containsIgnoreCase(String value, String lowerKeyword) {
+        return value != null && value.toLowerCase().contains(lowerKeyword);
+    }
+
+    private List<Event> applyInMemorySort(List<Event> events, Sort sort) {
+        if (sort == null || sort.isUnsorted()) {
+            return events;
+        }
+
+        Sort.Order order = sort.iterator().next();
+        String property = order.getProperty();
+        boolean ascending = order.isAscending();
+
+        java.util.Comparator<Event> comparator;
+
+        switch (property) {
+            case "name":
+                comparator = java.util.Comparator.comparing(
+                        Event::getName,
+                        java.util.Comparator.nullsLast(String.CASE_INSENSITIVE_ORDER)
+                );
+                break;
+
+            case "endTime":
+                comparator = java.util.Comparator.comparing(
+                        Event::getEndTime,
+                        java.util.Comparator.nullsLast(java.time.LocalDateTime::compareTo)
+                );
+                break;
+
+            case "maxAttendees":
+                comparator = java.util.Comparator.comparing(
+                        Event::getMaxAttendees,
+                        java.util.Comparator.nullsLast(Integer::compareTo)
+                );
+                break;
+
+            case "createdAt":
+                comparator = java.util.Comparator.comparing(
+                        Event::getCreatedAt,
+                        java.util.Comparator.nullsLast(java.time.LocalDateTime::compareTo)
+                );
+                break;
+
+            case "startTime":
+            default:
+                comparator = java.util.Comparator.comparing(
+                        Event::getStartTime,
+                        java.util.Comparator.nullsLast(java.time.LocalDateTime::compareTo)
+                );
+                break;
+        }
+
+        if (!ascending) {
+            comparator = comparator.reversed();
+        }
+
+        return events.stream()
+                .sorted(comparator)
+                .collect(Collectors.toList());
+    }
+
     private void validateEventTimes(LocalDateTime startTime, LocalDateTime endTime) {
         LocalDateTime now = LocalDateTime.now();
 

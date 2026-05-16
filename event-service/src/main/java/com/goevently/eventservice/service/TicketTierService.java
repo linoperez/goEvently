@@ -37,9 +37,11 @@ public class TicketTierService {
     }
 
     @Transactional
-    public TicketTierResponse createTier(CreateTicketTierRequest request) {
+    public TicketTierResponse createTier(CreateTicketTierRequest request, String username) {
         Event event = eventRepository.findById(request.getEventId())
                 .orElseThrow(() -> new EventException("Event not found with ID: " + request.getEventId()));
+
+        validateEventOwner(event, username);
 
         TicketTier tier = new TicketTier();
         tier.setEvent(event);
@@ -55,7 +57,12 @@ public class TicketTierService {
 
         kafkaProducerService.sendTicketTierCreated(response);
 
-        log.info("Created new ticket tier '{}' for event '{}'", savedTier.getName(), event.getName());
+        log.info(
+                "Created new ticket tier '{}' for event '{}' by user '{}'",
+                savedTier.getName(),
+                event.getName(),
+                username
+        );
 
         return response;
     }
@@ -68,9 +75,11 @@ public class TicketTierService {
     }
 
     @Transactional
-    public TicketTierResponse updateTier(Long id, UpdateTicketTierRequest request) {
+    public TicketTierResponse updateTier(Long id, UpdateTicketTierRequest request, String username) {
         TicketTier tier = ticketTierRepository.findById(id)
                 .orElseThrow(() -> new EventException("Ticket tier not found with ID: " + id));
+
+        validateTierOwner(tier, username);
 
         if (request.getName() != null) {
             tier.setName(request.getName());
@@ -91,18 +100,22 @@ public class TicketTierService {
         }
 
         TicketTier updated = ticketTierRepository.save(tier);
-        log.info("Updated ticket tier '{}'", updated.getName());
+
+        log.info("Updated ticket tier '{}' by user '{}'", updated.getName(), username);
 
         return mapToResponse(updated);
     }
 
     @Transactional
-    public void deleteTier(Long id) {
+    public void deleteTier(Long id, String username) {
         TicketTier tier = ticketTierRepository.findById(id)
                 .orElseThrow(() -> new EventException("Ticket tier not found with ID: " + id));
 
+        validateTierOwner(tier, username);
+
         ticketTierRepository.delete(tier);
-        log.info("Deleted ticket tier '{}'", tier.getName());
+
+        log.info("Deleted ticket tier '{}' by user '{}'", tier.getName(), username);
     }
 
     @Transactional
@@ -151,6 +164,32 @@ public class TicketTierService {
 
         return mapToResponse(tier);
     }
+
+    private void validateTierOwner(TicketTier tier, String username) {
+        if (tier.getEvent() == null) {
+            throw new EventException("Ticket tier is not linked to a valid event");
+        }
+
+        validateEventOwner(tier.getEvent(), username);
+    }
+
+    private void validateEventOwner(Event event, String username) {
+        if (event.getOrganizerUsername() == null || username == null) {
+            throw new EventException("You are not authorized to modify ticket tiers for this event");
+        }
+
+        if (!event.getOrganizerUsername().equalsIgnoreCase(username)) {
+            log.warn(
+                    "Unauthorized ticket tier modification attempt. Event ID: {}, Event owner: {}, Request user: {}",
+                    event.getId(),
+                    event.getOrganizerUsername(),
+                    username
+            );
+
+            throw new EventException("You are not authorized to modify ticket tiers for this event");
+        }
+    }
+
 
     private TicketTierResponse mapToResponse(TicketTier tier) {
         TicketTierResponse response = new TicketTierResponse();
