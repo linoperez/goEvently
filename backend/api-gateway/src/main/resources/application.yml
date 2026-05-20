@@ -1,0 +1,122 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: api-gateway
+  
+  cloud:
+    gateway:
+      default-filters:
+        - name: JwtAuthenticationFilter
+      # Simple route configuration
+      routes:
+        - id: auth-service
+          uri: lb://auth-service
+          predicates:
+            - Path=/api/auth/**
+
+        - id: event-service
+          uri: lb://event-service
+          predicates:
+            - Path=/api/events/**
+
+        # TICKET TIERS
+        - id: ticket-tier-service
+          uri: lb://event-service
+          predicates:
+            - Path=/api/ticket-tiers/**
+          filters:
+            - RewritePath=/api/ticket-tiers/(?<segment>.*), /api/ticket-tiers/${segment}
+
+        # EVENT SERVICE - VENUES
+        - id: event-service-venues
+          uri: lb://event-service
+          predicates:
+            - Path=/api/venues/**
+
+        # Event Service - Categories
+        - id: event-service-categories
+          uri: lb://event-service
+          predicates:
+            - Path=/api/categories/**
+
+        # Notification Service
+        - id: notification-service
+          uri: lb://notification-service
+          predicates:
+            - Path=/api/notifications/**
+
+        # Booking Service
+        - id: booking-service
+          uri: lb://booking-service
+          predicates:
+            - Path=/api/bookings/**
+        - id: lock-service
+          uri: lb://booking-service
+          predicates:
+            - Path=/api/locks/**
+
+        # Payment Service
+        - id: payment-service
+          uri: lb://payment-service
+          predicates:
+            - Path=/api/payments/**
+          filters:
+            - StripPrefix=0
+      globalcors:
+        add-to-simple-url-handler-mapping: true
+        cors-configurations:
+          '[/**]':
+            allowedOrigins:
+              - "http://localhost:5173"
+              - "http://192.168.1.9:5173"
+            allowedMethods:
+              - GET
+              - POST
+              - PUT
+              - PATCH
+              - DELETE
+              - OPTIONS
+            allowedHeaders:
+              - "*"
+            allowCredentials: true
+
+
+
+eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+  instance:
+    prefer-ip-address: true
+
+# JWT Configuration
+jwt:
+  secret: ${JWT_SECRET:myGoEventlySecretKeyThatIsLongEnoughForHS256Algorithm}
+
+# Management endpoints
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,gateway
+  endpoint:
+    health:
+      show-details: always
+
+# Logging
+logging:
+  level:
+    com.goevently.apigateway: INFO
+    org.springframework.cloud.gateway: DEBUG
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level [%X{correlationId:-N/A}] %logger{36} - %msg%n"
+
+jackson:
+  serialization:
+    write-dates-as-timestamps: false
+  deserialization:
+    fail-on-unknown-properties: false

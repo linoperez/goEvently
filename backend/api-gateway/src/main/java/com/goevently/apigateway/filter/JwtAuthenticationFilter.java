@@ -1,0 +1,137 @@
+package com.goevently.apigateway.filter;
+
+import com.goevently.apigateway.util.JwtUtil;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cloud.gateway.filter.GatewayFilter;
+import org.springframework.cloud.gateway.filter.factory.AbstractGatewayFilterFactory;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.server.reactive.ServerHttpRequest;
+import org.springframework.http.server.reactive.ServerHttpResponse;
+import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
+import reactor.core.publisher.Mono;
+
+/**
+ * JWT Authentication Filter for API Gateway.
+ * Validates JWT tokens and adds user information to headers.
+ */
+@Component
+@Slf4j
+public class JwtAuthenticationFilter extends AbstractGatewayFilterFactory<JwtAuthenticationFilter.Config> {
+
+    @Autowired
+    private JwtUtil jwtUtil;
+
+    public JwtAuthenticationFilter() {
+        super(Config.class);
+    }
+
+    @Override
+    public GatewayFilter apply(Config config) {
+        return (exchange, chain) -> {
+            ServerHttpRequest request = exchange.getRequest();
+
+            // Skip authentication for public endpoints
+            if (isPublicEndpoint(request)) {
+//            if (isPublicEndpoint(request.getPath().toString())) {
+                return chain.filter(exchange);
+            }
+
+            String authHeader = request.getHeaders().getFirst(HttpHeaders.AUTHORIZATION);
+
+            if (!StringUtils.hasText(authHeader) || !authHeader.startsWith("Bearer ")) {
+                return onError(exchange, "Missing or invalid Authorization header", HttpStatus.UNAUTHORIZED);
+            }
+
+            String token = authHeader.substring(7);
+
+            try {
+                if (!jwtUtil.validateToken(token)) {
+                    return onError(exchange, "Invalid or expired token", HttpStatus.UNAUTHORIZED);
+                }
+
+                // Extract user information from token
+                String username = jwtUtil.extractUsername(token);
+                String role = jwtUtil.extractRole(token);
+                Long userId = jwtUtil.extractUserId(token);
+
+                // Add user information to headers for downstream services
+                ServerHttpRequest modifiedRequest = request.mutate()
+                        .header("X-User-Username", username)
+                        .header("X-User-Role", role != null ? role : "USER")
+                        .header("X-User-Id", userId != null ? userId.toString() : "")
+                        .build();
+
+                log.debug("JWT validated for user: {}, role: {}", username, role);
+
+                return chain.filter(exchange.mutate().request(modifiedRequest).build());
+
+            } catch (Exception e) {
+                log.error("JWT validation error: {}", e.getMessage());
+                return onError(exchange, "Token validation failed", HttpStatus.UNAUTHORIZED);
+            }
+        };
+    }
+
+//    private boolean isPublicEndpoint(String path) {
+//        return path.startsWith("/api/auth/") ||
+//                path.startsWith("/actuator/") ||
+//                (path.startsWith("/api/events/") && path.contains("GET")); // Public event listings
+//    }
+    private boolean isPublicEndpoint(ServerHttpRequest request) {
+        String path = request.getPath().value();
+        String method = request.getMethod() != null ? request.getMethod().name() : "";
+
+        // Browser CORS preflight requests must always pass through.
+        if ("OPTIONS".equalsIgnoreCase(method)) {
+            return true;
+        }
+
+        // Always public
+        if (path.startsWith("/api/auth/") || path.startsWith("/actuator/")) {
+            return true;
+        }
+
+        // Public browsing endpoints (GET only)
+        if ("GET".equalsIgnoreCase(method)) {
+            return path.startsWith("/api/events/")
+                    || path.startsWith("/api/events")
+                    || path.startsWith("/api/categories/")
+                    || path.startsWith("/api/categories")
+                    || path.startsWith("/api/ticket-tiers/")
+                    || path.startsWith("/api/ticket-tiers");
+        }
+
+        return false;
+    }
+
+    private Mono<Void> onError(org.springframework.web.server.ServerWebExchange exchange,
+                               String message, HttpStatus status) {
+        ServerHttpRequest request = exchange.getRequest();
+        ServerHttpResponse response = exchange.getResponse();
+
+        String origin = request.getHeaders().getOrigin();
+
+        if ("http://localhost:5173".equals(origin) || "http://192.168.1.9:5173".equals(origin)) {
+            response.getHeaders().set("Access-Control-Allow-Origin", origin);
+            response.getHeaders().set("Access-Control-Allow-Credentials", "true");
+            response.getHeaders().set("Access-Control-Allow-Headers", "Authorization, Content-Type, Accept, Origin");
+            response.getHeaders().set("Access-Control-Allow-Methods", "GET, POST, PUT, PATCH, DELETE, OPTIONS");
+        }
+
+        response.setStatusCode(status);
+        response.getHeaders().add("Content-Type", "application/json");
+
+        String body = String.format("{\"success\":false,\"message\":\"%s\"}", message);
+        org.springframework.core.io.buffer.DataBuffer buffer =
+                response.bufferFactory().wrap(body.getBytes());
+
+        return response.writeWith(Mono.just(buffer));
+    }
+
+    public static class Config {
+        // Configuration properties if needed
+    }
+}

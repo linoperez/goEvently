@@ -1,0 +1,72 @@
+server:
+  port: 8082
+
+spring:
+  application:
+    name: event-service
+
+  datasource:
+    url: jdbc:mysql://localhost:3306/goevently_event_db?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true
+    username: root
+    password: ${DB_PASSWORD:sw@yam107}  # ← CHANGED: Environment variable
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: false  # ← CHANGED: Turn off for cleaner logs
+    properties:
+      hibernate:
+        format_sql: true
+
+  kafka:
+    bootstrap-servers: kafka:29092
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+    consumer:
+      group-id: event-service-group
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+
+eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+  instance:
+    prefer-ip-address: true
+
+# ← NEW: JWT Configuration - MUST MATCH auth-service
+jwt:
+  secret: ${JWT_SECRET:myGoEventlySecretKeyThatIsLongEnoughForHS256Algorithm}
+  expiration: ${JWT_EXPIRATION:36000000} # 10 hours
+
+# ← NEW: Management endpoints
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics
+  endpoint:
+    health:
+      show-details: when-authorized
+
+# ← NEW: Logging configuration
+logging:
+  level:
+    com.goevently.eventservice: INFO
+    org.springframework.security: WARN
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level [%X{correlationId:-N/A}] %logger{36} - %msg%n"
+
+cache:
+  type: redis
+  redis:
+    host: localhost
+    port: 6379
+
+internal:
+  api:
+    secret: goEvently@2823

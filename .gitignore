@@ -1,0 +1,9 @@
+.idea/
+**/.idea/
+Documentations/
+**/target/
+**/node_modules/
+*.iml
+.env
+*.log
+backend/docs/
