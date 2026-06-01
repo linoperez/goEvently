@@ -17,7 +17,7 @@ export async function getUserNotifications(userId, page = 0, size = 50) {
   const url = `/api/notifications/user/${userId}`;
 
   console.log("NOTIFICATION REQUEST:", {
-    baseURL: import.meta.env.VITE_API_BASE_URL,
+    baseURL: import.meta.env.VITE_API_BASE_URL || "http://localhost:8080",
     url,
     userId,
   });
